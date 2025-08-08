@@ -1,6 +1,6 @@
 import React from 'react'
-import { 
-  Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star
+import {
+  Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star, Eye
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -97,6 +97,15 @@ export default function HomePage() {
                 <MapPin className="w-4 h-4" />
                 <span>RSJ Mutiara Sukma</span>
               </div>
+            </div>
+            <div className="mt-4">
+              <Link 
+                href="/admin" 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Lihat Data Pendaftaran</span>
+              </Link>
             </div>
 
           </div>
