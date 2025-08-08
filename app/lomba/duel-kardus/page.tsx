@@ -205,62 +205,27 @@ export default function DuelKardusPage() {
                 <Palette className="w-6 h-6 text-hijau-600" />
                 Ketentuan Lomba
               </h3>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-hijau-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Menggunakan bahan kardus sebagai media utama</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-hijau-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Tema kemerdekaan Indonesia</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-hijau-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Kreativitas dan inovasi dalam desain</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-hijau-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Presentasi hasil karya</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-hijau-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Karya harus orisinil dan kreatif</span>
-                </li>
-              </ul>
+              <div className="text-center py-8">
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
+                <p className="text-gray-500">Ketentuan lomba akan diumumkan segera</p>
+              </div>
             </div>
 
             {/* Tema Karya */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Tema Karya</h3>
-              <div className="space-y-3 text-gray-600">
-                <p className="font-semibold text-hijau-600">"Kemerdekaan Indonesia dalam Kreativitas Kardus"</p>
-                <p>• Menggambarkan semangat kemerdekaan</p>
-                <p>• Menampilkan budaya dan kearifan lokal</p>
-                <p>• Inovasi dalam penggunaan kardus</p>
-                <p>• Pesan positif untuk bangsa</p>
+              <div className="text-center py-8">
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
+                <p className="text-gray-500">Tema karya akan diumumkan segera</p>
               </div>
             </div>
 
             {/* Kriteria Penilaian */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Kriteria Penilaian</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kreativitas & Inovasi</span>
-                  <span className="font-semibold text-hijau-600">40%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kesesuaian dengan tema</span>
-                  <span className="font-semibold text-hijau-600">30%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Teknik & Kerapian</span>
-                  <span className="font-semibold text-hijau-600">20%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Presentasi</span>
-                  <span className="font-semibold text-hijau-600">10%</span>
-                </div>
+              <div className="text-center py-8">
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
+                <p className="text-gray-500">Kriteria penilaian akan diumumkan segera</p>
               </div>
             </div>
 
