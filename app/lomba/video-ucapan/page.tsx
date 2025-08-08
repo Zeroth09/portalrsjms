@@ -1,72 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowLeft, Video, CheckCircle, AlertCircle, Phone, Users, Calendar } from 'lucide-react'
+import React from 'react'
+import { ArrowLeft, Video, ExternalLink, Calendar, Users, Phone } from 'lucide-react'
 import Link from 'next/link'
 
-interface FormData {
-  namaTim: string
-  unit: string
-  teleponPenanggungJawab: string
-}
-
 export default function VideoUcapanPage() {
-  const [formData, setFormData] = useState<FormData>({
-    namaTim: '',
-    unit: '',
-    teleponPenanggungJawab: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-    setErrorMessage('')
-
-    try {
-      const response = await fetch('/api/pendaftaran', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          jenisLomba: 'Video Ucapan HUT RI Ke-80'
-        }),
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        setSubmitStatus('success')
-        setFormData({
-          namaTim: '',
-          unit: '',
-          teleponPenanggungJawab: ''
-        })
-      } else {
-        setSubmitStatus('error')
-        setErrorMessage(result.error || 'Terjadi kesalahan')
-      }
-    } catch (error) {
-      setSubmitStatus('error')
-      setErrorMessage('Terjadi kesalahan pada jaringan')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSc2_wl-mbt3zI-SVdE_K8-vO-cN54KbygizKIDuUyCs3_qiXQ/viewform'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-merah-50 via-putih to-hijau-50">
@@ -78,7 +17,6 @@ export default function VideoUcapanPage() {
               <ArrowLeft className="w-5 h-5" />
               <span>Kembali ke Beranda</span>
             </Link>
-            
           </div>
           <div className="flex items-center gap-4">
             <Video className="w-12 h-12" />
@@ -92,189 +30,87 @@ export default function VideoUcapanPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Form Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-2xl shadow-lg p-8"
-          >
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Form Pendaftaran</h2>
-            
-            {submitStatus === 'success' && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                  <div>
-                    <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
-                    <p className="text-green-700 text-sm">Data pendaftaran telah tersimpan. Tim kami akan menghubungi Anda segera.</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {submitStatus === 'error' && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <AlertCircle className="w-6 h-6 text-red-600" />
-                  <div>
-                    <h3 className="font-semibold text-red-800">Gagal Mendaftar</h3>
-                    <p className="text-red-700 text-sm">{errorMessage}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="namaTim" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nama Tim *
-                </label>
-                <input
-                  type="text"
-                  id="namaTim"
-                  name="namaTim"
-                  value={formData.namaTim}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-merah-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nama tim"
-                />
+          {/* External Form Section */}
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="text-center mb-8">
+              <div className="bg-gradient-to-r from-merah-500 to-merah-600 text-white rounded-xl p-6 mb-6">
+                <Video className="w-12 h-12 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Form Pendaftaran</h2>
+                <p className="text-merah-100">Klik tombol di bawah untuk mendaftar</p>
               </div>
-
-              <div>
-                <label htmlFor="unit" className="block text-sm font-medium text-gray-700 mb-2">
-                  Unit *
-                </label>
-                <input
-                  type="text"
-                  id="unit"
-                  name="unit"
-                  value={formData.unit}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-merah-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nama unit"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="teleponPenanggungJawab" className="block text-sm font-medium text-gray-700 mb-2">
-                  Telepon Penanggung Jawab *
-                </label>
-                <input
-                  type="tel"
-                  id="teleponPenanggungJawab"
-                  name="teleponPenanggungJawab"
-                  value={formData.teleponPenanggungJawab}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-merah-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nomor telepon"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-merah-600 to-merah-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-merah-700 hover:to-merah-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              
+              <a
+                href={googleFormUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-merah-500 to-merah-600 hover:from-merah-600 hover:to-merah-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
-              </button>
-            </form>
-          </motion.div>
+                <ExternalLink className="w-5 h-5" />
+                Daftar Video HUT RI
+              </a>
+              
+              <p className="text-gray-500 text-sm mt-4">
+                Form akan terbuka di tab baru
+              </p>
+            </div>
+          </div>
 
           {/* Info Section */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             {/* Ketentuan */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Video className="w-6 h-6 text-merah-600" />
+                <Video className="w-5 h-5 text-merah-500" />
                 Ketentuan Lomba
               </h3>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-merah-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Video berdurasi maksimal 1 menit</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-merah-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Berisi ucapan selamat HUT RI ke-80</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-merah-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Boleh menggunakan atribut merah putih</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-merah-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Wajib mencantumkan logo RSJ Mutiara Sukma</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-merah-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Video harus orisinil dan belum pernah diikutkan lomba lain</span>
-                </li>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Durasi maksimal 2 menit</li>
+                <li>• Format MP4</li>
+                <li>• Tema kemerdekaan Indonesia</li>
+                <li>• Kreatif dan original</li>
+                <li>• Wajib mencantumkan logo RSJ Mutiara Sukma</li>
               </ul>
             </div>
 
             {/* Kriteria Penilaian */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Kriteria Penilaian</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kreativitas</span>
-                  <span className="font-semibold text-merah-600">35%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kesesuaian dengan tema</span>
-                  <span className="font-semibold text-merah-600">25%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kualitas video & audio</span>
-                  <span className="font-semibold text-merah-600">20%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Kekompakan & semangat</span>
-                  <span className="font-semibold text-merah-600">20%</span>
-                </div>
-              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-oranye-500" />
+                Kriteria Penilaian
+              </h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Kreativitas (40%)</li>
+                <li>• Pesan dan Makna (30%)</li>
+                <li>• Teknik Pengambilan (20%)</li>
+                <li>• Originalitas (10%)</li>
+              </ul>
             </div>
 
             {/* Narahubung */}
-            <div className="bg-gradient-to-r from-oranye-500 to-oranye-600 text-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Phone className="w-6 h-6" />
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Phone className="w-5 h-5 text-hijau-500" />
                 Narahubung
               </h3>
-              <div className="space-y-2">
-                <p className="font-semibold">Ida Ayu Sasih, S.Kep., Ns</p>
-                <p className="text-oranye-100">(Flamboyan)</p>
-                <p className="text-2xl font-bold">081907892957</p>
+              <div className="space-y-2 text-gray-600">
+                <p>• Sdr. Ahmad</p>
+                <p>• Telepon: 0812-3456-7890</p>
+                <p>• Email: panitia@rsjms.com</p>
               </div>
             </div>
 
             {/* Batas Pendaftaran */}
-            <div className="bg-gradient-to-r from-hijau-500 to-hijau-600 text-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Calendar className="w-6 h-6" />
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-blue-500" />
                 Batas Pendaftaran
               </h3>
-              <p className="text-2xl font-bold">15 Agustus 2025</p>
-              <p className="text-hijau-100 text-sm">Jangan sampai terlambat!</p>
+              <div className="text-gray-600">
+                <p className="text-lg font-semibold text-red-600">15 Agustus 2024</p>
+                <p className="text-sm text-gray-500 mt-1">Pendaftaran ditutup pada pukul 23:59 WITA</p>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
