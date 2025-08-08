@@ -21,9 +21,15 @@ const initGoogleSheets = async () => {
       throw new Error('Environment variables tidak lengkap')
     }
 
+    // Perbaiki format private key
+    let privateKey = GOOGLE_PRIVATE_KEY
+    if (privateKey.includes('\\n')) {
+      privateKey = privateKey.replace(/\\n/g, '\n')
+    }
+
     const serviceAccountAuth = new JWT({
       email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      key: privateKey,
       scopes: [
         'https://www.googleapis.com/auth/spreadsheets',
       ],
@@ -34,7 +40,7 @@ const initGoogleSheets = async () => {
     return doc
   } catch (error) {
     console.error('Error initializing Google Sheets:', error)
-    throw new Error('Gagal menginisialisasi Google Sheets')
+    throw new Error('Gagal menginisialisasi Google Sheets: ' + (error instanceof Error ? error.message : 'Unknown error'))
   }
 }
 
