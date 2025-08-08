@@ -14,11 +14,7 @@ const lombaData = [
     nama: 'Video Ucapan HUT RI',
     deskripsi: 'Buat video ucapan kreatif untuk HUT RI Ke-80',
     icon: Video,
-    warna: 'from-merah-500 to-merah-600',
     bgColor: 'bg-gradient-to-r from-merah-500 to-merah-600',
-    ketentuan: 'Durasi maksimal 2 menit, format MP4',
-    kriteria: 'Kreativitas, Pesan, Teknik Pengambilan',
-    narahubung: 'Sdr. Ahmad (0812-3456-7890)',
     batasDaftar: '15 Agustus 2024'
   },
   {
@@ -26,11 +22,7 @@ const lombaData = [
     nama: 'Gobak Sodor',
     deskripsi: 'Lomba tradisional gobak sodor antar unit',
     icon: Gamepad2,
-    warna: 'from-oranye-500 to-oranye-600',
     bgColor: 'bg-gradient-to-r from-oranye-500 to-oranye-600',
-    ketentuan: 'Tim 6 orang, durasi 10 menit',
-    kriteria: 'Kerjasama, Strategi, Kecepatan',
-    narahubung: 'Sdr. Budi (0812-3456-7891)',
     batasDaftar: '12 Agustus 2024'
   },
   {
@@ -38,11 +30,7 @@ const lombaData = [
     nama: 'Video TikTok',
     deskripsi: 'Buat konten TikTok bertema kemerdekaan',
     icon: Video,
-    warna: 'from-hijau-500 to-hijau-600',
     bgColor: 'bg-gradient-to-r from-hijau-500 to-hijau-600',
-    ketentuan: 'Durasi 15-60 detik, tema kemerdekaan',
-    kriteria: 'Kreativitas, Viralitas, Pesan',
-    narahubung: 'Sdr. Citra (0812-3456-7892)',
     batasDaftar: '15 Agustus 2024'
   },
   {
@@ -50,11 +38,7 @@ const lombaData = [
     nama: 'Duel Kardus Cerdas',
     deskripsi: 'Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus',
     icon: Car,
-    warna: 'from-purple-500 to-purple-600',
     bgColor: 'bg-gradient-to-r from-purple-500 to-purple-600',
-    ketentuan: 'Bahan utama kardus, durasi 30 menit',
-    kriteria: 'Kreativitas, Kerapian, Originalitas',
-    narahubung: 'Sdr. Dedi (0812-3456-7893)',
     batasDaftar: '12 Agustus 2024'
   },
   {
@@ -62,11 +46,7 @@ const lombaData = [
     nama: 'Sepeda Hias',
     deskripsi: 'Dekorasi sepeda dengan tema kemerdekaan',
     icon: Bike,
-    warna: 'from-blue-500 to-blue-600',
     bgColor: 'bg-gradient-to-r from-blue-500 to-blue-600',
-    ketentuan: 'Sepeda sendiri, tema kemerdekaan',
-    kriteria: 'Kreativitas, Kerapian, Tema',
-    narahubung: 'Sdr. Eka (0812-3456-7894)',
     batasDaftar: '14 Agustus 2024'
   }
 ]
@@ -74,11 +54,9 @@ const lombaData = [
 export default function HomePage() {
   const [showTimelineModal, setShowTimelineModal] = useState(false)
 
-  // Show modal on first visit
   useEffect(() => {
     const hasSeenModal = localStorage.getItem('hasSeenTimelineModal')
     if (!hasSeenModal) {
-      // Delay modal appearance for better UX
       const timer = setTimeout(() => {
         setShowTimelineModal(true)
         localStorage.setItem('hasSeenTimelineModal', 'true')
@@ -89,13 +67,11 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Timeline Modal */}
       <TimelineModal 
         isOpen={showTimelineModal} 
         onClose={() => setShowTimelineModal(false)} 
       />
       
-      {/* Header */}
       <header className="relative overflow-hidden">
         <motion.div 
           className="absolute inset-0 bg-gradient-to-r from-merah-600 via-oranye-500 to-hijau-600 opacity-90"
@@ -108,7 +84,7 @@ export default function HomePage() {
             ]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        ></motion.div>
+        />
         <div className="relative z-10 container mx-auto px-4 py-16 text-center text-white">
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
@@ -195,9 +171,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
-        {/* Pilih Lomba Section */}
         <section id="lomba-section" className="mb-16">
           <motion.div 
             className="text-center mb-12"
@@ -278,7 +252,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
