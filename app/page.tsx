@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star, Eye
 } from 'lucide-react'
 import Link from 'next/link'
+import TimelineModal from './components/TimelineModal'
 
 const lombaData = [
   {
@@ -69,8 +70,28 @@ const lombaData = [
 ]
 
 export default function HomePage() {
+  const [showTimelineModal, setShowTimelineModal] = useState(false)
+
+  // Show modal on first visit
+  useEffect(() => {
+    const hasSeenModal = localStorage.getItem('hasSeenTimelineModal')
+    if (!hasSeenModal) {
+      // Delay modal appearance for better UX
+      const timer = setTimeout(() => {
+        setShowTimelineModal(true)
+        localStorage.setItem('hasSeenTimelineModal', 'true')
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen">
+      {/* Timeline Modal */}
+      <TimelineModal 
+        isOpen={showTimelineModal} 
+        onClose={() => setShowTimelineModal(false)} 
+      />
       {/* Header */}
       <header className="relative overflow-hidden">
         <motion.div 
@@ -145,7 +166,7 @@ export default function HomePage() {
               </div>
             </motion.div>
             <motion.div 
-              className="mt-4"
+              className="mt-4 flex items-center justify-center gap-3"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 1 }}
@@ -157,6 +178,15 @@ export default function HomePage() {
                 <Eye className="w-4 h-4" />
                 <span>Lihat Data Pendaftaran</span>
               </Link>
+              <motion.button
+                onClick={() => setShowTimelineModal(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Lihat Timeline</span>
+              </motion.button>
             </motion.div>
           </motion.div>
         </div>
@@ -165,7 +195,7 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         {/* Pilih Lomba Section */}
-        <section className="mb-16">
+        <section id="lomba-section" className="mb-16">
           <motion.div 
             className="text-center mb-12"
             initial={{ opacity: 0, y: 30 }}
