@@ -72,9 +72,31 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="relative overflow-hidden">
+        {/* Background dengan ornamen bendera */}
         <div className="absolute inset-0 bg-gradient-to-r from-merah-600 via-oranye-500 to-hijau-600 opacity-90"></div>
+        
+        {/* Ornamen bendera di background */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-4 left-4 w-16 h-10 bg-merah-500"></div>
+          <div className="absolute top-4 left-20 w-16 h-10 bg-putih"></div>
+          <div className="absolute top-4 right-4 w-16 h-10 bg-merah-500"></div>
+          <div className="absolute top-4 right-20 w-16 h-10 bg-putih"></div>
+          <div className="absolute bottom-4 left-1/4 w-16 h-10 bg-merah-500"></div>
+          <div className="absolute bottom-4 left-1/4 w-16 h-10 translate-x-16 bg-putih"></div>
+        </div>
+
         <div className="relative z-10 container mx-auto px-4 py-16 text-center text-white">
           <div className="transition-all duration-300">
+            {/* Logo HUT RI Ke-80 */}
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-yellow-400 rounded-full mb-4 shadow-lg">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-merah-600">80</div>
+                  <div className="text-xs font-semibold text-merah-600">TAHUN</div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center justify-center gap-4 mb-6">
               <Star className="w-8 h-8 text-yellow-300" />
               <h1 className="text-4xl md:text-6xl font-bold">
@@ -82,12 +104,21 @@ export default function HomePage() {
               </h1>
               <Star className="w-8 h-8 text-yellow-300" />
             </div>
+            
             <h2 className="text-2xl md:text-3xl font-semibold mb-4">
               HUT Kemerdekaan RI Ke-80
             </h2>
             <p className="text-xl mb-6">
               RSJ Mutiara Sukma
             </p>
+
+            {/* Ornamen tambahan */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="w-8 h-1 bg-yellow-300 rounded"></div>
+              <div className="w-4 h-1 bg-yellow-300 rounded"></div>
+              <div className="w-8 h-1 bg-yellow-300 rounded"></div>
+            </div>
+
             <div className="flex items-center justify-center gap-4 mt-6 text-sm">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -98,6 +129,7 @@ export default function HomePage() {
                 <span>RSJ Mutiara Sukma</span>
               </div>
             </div>
+            
             <div className="mt-4">
               <Link 
                 href="/admin" 
@@ -107,7 +139,6 @@ export default function HomePage() {
                 <span>Lihat Data Pendaftaran</span>
               </Link>
             </div>
-
           </div>
         </div>
       </header>
@@ -115,14 +146,37 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         {/* Pilih Lomba Section */}
-        <section className="mb-16">
-          <div className="text-center mb-12 transition-all duration-300">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Pilih Lomba Favoritmu
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Berbagai lomba seru menanti partisipasi kalian dalam rangka memeriahkan HUT Kemerdekaan RI Ke-80
-            </p>
+        <section className="mb-16 relative">
+          {/* Ornamen background */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-0 left-0 w-32 h-32 bg-merah-500 rounded-full -translate-x-16 -translate-y-16"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-putih rounded-full translate-x-12 -translate-y-12"></div>
+            <div className="absolute bottom-0 left-1/4 w-20 h-20 bg-merah-500 rounded-full -translate-y-10"></div>
+          </div>
+          
+          <div className="relative z-10">
+            <div className="text-center mb-12 transition-all duration-300">
+              {/* Ornamen dekoratif */}
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <div className="w-12 h-1 bg-merah-500 rounded"></div>
+                <div className="w-8 h-1 bg-putih rounded"></div>
+                <div className="w-12 h-1 bg-merah-500 rounded"></div>
+              </div>
+              
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                Pilih Lomba Favoritmu
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Berbagai lomba seru menanti partisipasi kalian dalam rangka memeriahkan HUT Kemerdekaan RI Ke-80
+              </p>
+              
+              {/* Ornamen dekoratif */}
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <div className="w-8 h-1 bg-merah-500 rounded"></div>
+                <div className="w-4 h-1 bg-putih rounded"></div>
+                <div className="w-8 h-1 bg-merah-500 rounded"></div>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -156,8 +210,21 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
+      <footer className="bg-gray-800 text-white py-8 mt-16 relative overflow-hidden">
+        {/* Ornamen background footer */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-merah-500 rounded-full -translate-x-20 translate-y-20"></div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-putih rounded-full translate-x-16 translate-y-16"></div>
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          {/* Ornamen dekoratif */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <div className="w-16 h-1 bg-merah-500 rounded"></div>
+            <div className="w-8 h-1 bg-putih rounded"></div>
+            <div className="w-16 h-1 bg-merah-500 rounded"></div>
+          </div>
+          
           <div className="flex items-center justify-center gap-4 mb-4">
             <Star className="w-6 h-6 text-yellow-300" />
             <h3 className="text-xl font-bold">Portal Lomba RSJ Mutiara Sukma</h3>
@@ -176,7 +243,13 @@ export default function HomePage() {
               <span>RSJ Mutiara Sukma</span>
             </div>
           </div>
-
+          
+          {/* Ornamen dekoratif */}
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="w-12 h-1 bg-merah-500 rounded"></div>
+            <div className="w-6 h-1 bg-putih rounded"></div>
+            <div className="w-12 h-1 bg-merah-500 rounded"></div>
+          </div>
         </div>
       </footer>
     </div>
