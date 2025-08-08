@@ -1,6 +1,6 @@
 import React from 'react'
 import { 
-  Users, Video, Gamepad2, Car, Bike, Trophy, Calendar, MapPin, Phone, Mail, ArrowRight, Star
+  Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -143,40 +143,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Informasi Section */}
-        <section className="bg-white rounded-2xl shadow-lg p-8">
-          <div className="transition-all duration-300">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-              Informasi Penting
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-oranye-500" />
-                  Hadiah Menarik
-                </h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li>• Juara 1: Rp 2.000.000</li>
-                  <li>• Juara 2: Rp 1.500.000</li>
-                  <li>• Juara 3: Rp 1.000.000</li>
-                  <li>• Sertifikat untuk semua peserta</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-hijau-500" />
-                  Kontak Panitia
-                </h3>
-                <div className="space-y-2 text-gray-600">
-                  <p>• Ketua: Sdr. Ahmad (0812-3456-7890)</p>
-                  <p>• Sekretaris: Sdr. Budi (0812-3456-7891)</p>
-                  <p>• Bendahara: Sdr. Citra (0812-3456-7892)</p>
-                  <p>• Email: panitia@rsjms.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+
       </main>
 
       {/* Footer */}
