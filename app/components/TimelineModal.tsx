@@ -2,13 +2,12 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Calendar, Star, CheckCircle, Clock, Award } from 'lucide-react'
+import { X, Calendar, Star, Clock, Award } from 'lucide-react'
 
 interface TimelineEvent {
   date: string
   title: string
   description: string
-  status: 'completed' | 'upcoming' | 'current'
   type: 'registration' | 'deadline' | 'event' | 'preparation' | 'peak'
 }
 
@@ -17,79 +16,57 @@ const timelineEvents: TimelineEvent[] = [
     date: '8-14 Agustus',
     title: 'Pendaftaran Lomba',
     description: 'Periode pendaftaran untuk semua lomba',
-    status: 'completed',
     type: 'registration'
   },
   {
     date: '12 Agustus',
     title: 'Deadline Pendaftaran Gobak Sodor & Duel Kardus',
     description: 'Batas akhir pendaftaran untuk lomba Gobak Sodor dan Duel Kardus Cerdas',
-    status: 'completed',
     type: 'deadline'
   },
   {
     date: '13 Agustus',
     title: 'Pelaksanaan Gobak Sodor & Duel Kardus',
     description: 'Hari pelaksanaan lomba Gobak Sodor dan Duel Kardus Cerdas',
-    status: 'completed',
     type: 'event'
   },
   {
     date: '14 Agustus',
     title: 'Deadline Pendaftaran Sepeda Hias',
     description: 'Batas akhir pendaftaran untuk lomba Sepeda Hias',
-    status: 'completed',
     type: 'deadline'
   },
   {
     date: '15 Agustus',
     title: 'Pelaksanaan Sepeda Hias',
     description: 'Hari pelaksanaan lomba Sepeda Hias',
-    status: 'upcoming',
     type: 'event'
   },
   {
     date: '15 Agustus',
     title: 'HARI PUNCAK RANGKAIAN HUT RI KE-80',
     description: 'Puncak acara perayaan HUT Kemerdekaan RI Ke-80',
-    status: 'upcoming',
     type: 'peak'
   },
   {
     date: '15 Agustus',
     title: 'Deadline Pendaftaran Video TikTok & Video HUT RI',
     description: 'Batas akhir pendaftaran untuk lomba Video TikTok dan Video Ucapan HUT RI',
-    status: 'upcoming',
     type: 'deadline'
   },
   {
     date: '16 Agustus',
     title: 'Persiapan Acara',
     description: 'Hari persiapan untuk upacara bendera',
-    status: 'upcoming',
     type: 'preparation'
   },
   {
     date: '17 Agustus',
     title: 'UPACARA BENDERA HUT RI KE-80',
     description: 'Upacara bendera dalam rangka HUT Kemerdekaan RI Ke-80',
-    status: 'upcoming',
     type: 'peak'
   }
 ]
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case 'completed':
-      return 'text-green-600 bg-green-100 border-green-200'
-    case 'current':
-      return 'text-blue-600 bg-blue-100 border-blue-200'
-    case 'upcoming':
-      return 'text-gray-600 bg-gray-100 border-gray-200'
-    default:
-      return 'text-gray-600 bg-gray-100 border-gray-200'
-  }
-}
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -192,19 +169,14 @@ export default function TimelineModal({ isOpen, onClose }: TimelineModalProps) {
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={`relative p-4 rounded-xl border-2 ${getStatusColor(event.status)} transition-all duration-300 hover:scale-105`}
+                    className="relative p-4 rounded-xl border-2 border-gray-200 bg-gray-50 transition-all duration-300 hover:scale-105"
                   >
                     <div className="flex items-start gap-4">
                       <div className={`flex-shrink-0 p-2 rounded-full bg-white ${getTypeColor(event.type)}`}>
                         {getTypeIcon(event.type)}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-bold text-lg">{event.title}</h3>
-                          {event.status === 'completed' && (
-                            <CheckCircle className="w-5 h-5 text-green-600" />
-                          )}
-                        </div>
+                        <h3 className="font-bold text-lg mb-2">{event.title}</h3>
                         <p className="text-sm opacity-80 mb-2">{event.description}</p>
                         <span className="inline-block px-3 py-1 bg-white/50 rounded-full text-xs font-medium">
                           {event.date}
@@ -218,21 +190,7 @@ export default function TimelineModal({ isOpen, onClose }: TimelineModalProps) {
 
             {/* Footer */}
             <div className="bg-gray-50 p-6 border-t">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span>Selesai</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <span>Sedang Berlangsung</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                    <span>Akan Datang</span>
-                  </div>
-                </div>
+              <div className="flex justify-end">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
