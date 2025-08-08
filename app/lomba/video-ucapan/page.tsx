@@ -92,10 +92,10 @@ export default function VideoUcapanPage() {
                 <Phone className="w-5 h-5 text-hijau-500" />
                 Narahubung
               </h3>
-              <div className="space-y-2 text-gray-600">
-                <p>• Diky Rizky Wila</p>
-                <p>• Telepon: 0818-0572-6766</p>
-              </div>
+                                    <div className="space-y-2 text-gray-600">
+                        <p>• Diky Rizky Wila</p>
+                        <p>• Telepon: <a href="https://wa.me/6281805726766" target="_blank" rel="noopener noreferrer" className="text-merah-600 hover:text-merah-700 font-semibold underline">0818-0572-6766</a></p>
+                      </div>
             </div>
 
             {/* Batas Pendaftaran */}

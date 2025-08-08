@@ -249,7 +249,11 @@ export default function GobakSodorPage() {
               <div className="space-y-2">
                 <p className="font-semibold">Jumratul Akbar, S.Kep., Ns</p>
                 <p className="text-oranye-100">(Melati)</p>
-                <p className="text-2xl font-bold">085339151308</p>
+                <p className="text-2xl font-bold">
+                  <a href="https://wa.me/6285339151308" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                    085339151308
+                  </a>
+                </p>
               </div>
             </div>
 

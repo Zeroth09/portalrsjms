@@ -263,7 +263,7 @@ export default function VideoTikTokPage() {
               <div className="space-y-2 text-gray-600">
                 <p>• Regina Salsa Gandi, S.Kep., Ns</p>
                 <p>• Unit: Dahlia</p>
-                <p>• Telepon: 087862236921</p>
+                <p>• Telepon: <a href="https://wa.me/6287862236921" target="_blank" rel="noopener noreferrer" className="text-hijau-600 hover:text-hijau-700 font-semibold underline">087862236921</a></p>
               </div>
             </div>
 

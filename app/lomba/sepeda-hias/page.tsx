@@ -247,7 +247,11 @@ export default function SepedaHiasPage() {
               <div className="space-y-2">
                 <p className="font-semibold">Eva Susanti</p>
                 <p className="text-blue-100">(K3LRS)</p>
-                <p className="text-2xl font-bold">081933121398</p>
+                <p className="text-2xl font-bold">
+                  <a href="https://wa.me/6281933121398" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                    081933121398
+                  </a>
+                </p>
               </div>
             </div>
 

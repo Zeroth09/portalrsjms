@@ -238,7 +238,11 @@ export default function DuelKardusPage() {
               <div className="space-y-2">
                 <p className="font-semibold">Muhammad Rizkyawansyah</p>
                 <p className="text-hijau-100">(SIRS)</p>
-                <p className="text-2xl font-bold">085155380066</p>
+                <p className="text-2xl font-bold">
+                  <a href="https://wa.me/6285155380066" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                    085155380066
+                  </a>
+                </p>
               </div>
             </div>
 
