@@ -21,10 +21,23 @@ const initGoogleSheets = async () => {
       throw new Error('Environment variables tidak lengkap')
     }
 
-    // Perbaiki format private key
+    // Perbaiki format private key dengan lebih hati-hati
     let privateKey = GOOGLE_PRIVATE_KEY
-    if (privateKey.includes('\\n')) {
-      privateKey = privateKey.replace(/\\n/g, '\n')
+    
+    // Hapus semua escape characters dan format ulang
+    privateKey = privateKey
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\\\/g, '\\')
+    
+    // Pastikan private key dimulai dan berakhir dengan benar
+    if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+      throw new Error('Format private key tidak valid')
+    }
+    
+    if (!privateKey.includes('-----END PRIVATE KEY-----')) {
+      throw new Error('Format private key tidak valid')
     }
 
     const serviceAccountAuth = new JWT({
