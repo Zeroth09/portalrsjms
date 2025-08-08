@@ -43,8 +43,8 @@ const lombaData = [
   },
   {
     id: 'duel-kardus',
-    nama: 'Duel Kardus',
-    deskripsi: 'Lomba kreativitas membuat kostum dari kardus',
+    nama: 'Duel Kardus Cerdas',
+    deskripsi: 'Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus',
     icon: Car,
     warna: 'from-purple-500 to-purple-600',
     bgColor: 'bg-gradient-to-r from-purple-500 to-purple-600',

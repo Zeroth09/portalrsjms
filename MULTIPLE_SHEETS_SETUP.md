@@ -9,7 +9,7 @@ Portal lomba akan membuat sheet terpisah untuk setiap jenis lomba secara otomati
 1. **Video_Ucapan_HUT_RI** - Untuk lomba Video Ucapan HUT RI
 2. **Gobak_Sodor** - Untuk lomba Gobak Sodor  
 3. **Video_TikTok** - Untuk lomba Video TikTok
-4. **Duel_Kardus** - Untuk lomba Duel Kardus
+4. **Duel_Kardus_Cerdas** - Untuk lomba Duel Kardus Cerdas
 5. **Sepeda_Hias** - Untuk lomba Sepeda Hias
 
 ## 📋 Header yang Sama untuk Semua Sheet
@@ -71,9 +71,9 @@ Setiap sheet akan memiliki header yang sama:
 ├── 📄 Video_TikTok
 │   ├── Nama Tim | Unit | Telepon | Jenis Lomba | Tanggal | Status | Catatan
 │   └── [Data pendaftar Video TikTok]
-├── 📄 Duel_Kardus
+├── 📄 Duel_Kardus_Cerdas
 │   ├── Nama Tim | Unit | Telepon | Jenis Lomba | Tanggal | Status | Catatan
-│   └── [Data pendaftar Duel Kardus]
+│   └── [Data pendaftar Duel Kardus Cerdas]
 └── 📄 Sepeda_Hias
     ├── Nama Tim | Unit | Telepon | Jenis Lomba | Tanggal | Status | Catatan
     └── [Data pendaftar Sepeda Hias]

@@ -86,7 +86,7 @@ const getSheetNameByJenisLomba = (jenisLomba: string): string => {
     'Video Ucapan HUT RI': 'Video_Ucapan_HUT_RI',
     'Gobak Sodor': 'Gobak_Sodor',
     'Video TikTok': 'Video_TikTok',
-    'Duel Kardus': 'Duel_Kardus',
+    'Duel Kardus Cerdas': 'Duel_Kardus_Cerdas',
     'Sepeda Hias': 'Sepeda_Hias'
   }
   return mapping[jenisLomba] || 'Pendaftaran_Umum'
