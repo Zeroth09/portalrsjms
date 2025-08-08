@@ -43,6 +43,15 @@ export async function POST(request: NextRequest) {
       status: 'pending'
     }
 
+    // Cek environment variables
+    if (!process.env.GOOGLE_SPREADSHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+      console.error('Missing environment variables')
+      return NextResponse.json(
+        { success: false, error: 'Konfigurasi database belum lengkap' },
+        { status: 500 }
+      )
+    }
+
     await pendaftaranService.create(dataToSave)
     
     return NextResponse.json(
@@ -51,8 +60,11 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error('Error in POST /api/pendaftaran:', error)
+    
+    // Return error yang lebih detail
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { success: false, error: 'Gagal menambah pendaftaran' },
+      { success: false, error: `Gagal menambah pendaftaran: ${errorMessage}` },
       { status: 500 }
     )
   }

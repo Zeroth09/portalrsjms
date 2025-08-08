@@ -18,6 +18,15 @@ export async function PUT(
       )
     }
 
+    // Cek environment variables
+    if (!process.env.GOOGLE_SPREADSHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+      console.error('Missing environment variables')
+      return NextResponse.json(
+        { success: false, error: 'Konfigurasi database belum lengkap' },
+        { status: 500 }
+      )
+    }
+
     await pendaftaranService.updateStatus(id, status, catatan)
     
     return NextResponse.json(
@@ -25,8 +34,9 @@ export async function PUT(
     )
   } catch (error) {
     console.error('Error in PUT /api/pendaftaran/[id]:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { success: false, error: 'Gagal mengupdate status pendaftaran' },
+      { success: false, error: `Gagal mengupdate status pendaftaran: ${errorMessage}` },
       { status: 500 }
     )
   }
@@ -39,6 +49,16 @@ export async function DELETE(
 ) {
   try {
     const { id } = params
+
+    // Cek environment variables
+    if (!process.env.GOOGLE_SPREADSHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+      console.error('Missing environment variables')
+      return NextResponse.json(
+        { success: false, error: 'Konfigurasi database belum lengkap' },
+        { status: 500 }
+      )
+    }
+
     await pendaftaranService.delete(id)
     
     return NextResponse.json(
@@ -46,8 +66,9 @@ export async function DELETE(
     )
   } catch (error) {
     console.error('Error in DELETE /api/pendaftaran/[id]:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { success: false, error: 'Gagal menghapus pendaftaran' },
+      { success: false, error: `Gagal menghapus pendaftaran: ${errorMessage}` },
       { status: 500 }
     )
   }
