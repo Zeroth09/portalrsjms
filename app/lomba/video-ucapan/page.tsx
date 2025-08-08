@@ -93,9 +93,8 @@ export default function VideoUcapanPage() {
                 Narahubung
               </h3>
               <div className="space-y-2 text-gray-600">
-                <p>• Sdr. Ahmad</p>
-                <p>• Telepon: 0812-3456-7890</p>
-                <p>• Email: panitia@rsjms.com</p>
+                <p>• Diky Rizky Wila</p>
+                <p>• Telepon: 0818-0572-6766</p>
               </div>
             </div>
 
