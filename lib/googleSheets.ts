@@ -60,8 +60,10 @@ const initGoogleSheets = async () => {
 // Interface untuk data pendaftaran
 export interface PendaftaranData {
   id?: string
-  namaTim: string
-  unit: string
+  namaTim?: string
+  unit?: string
+  usernameAkun?: string
+  asalInstansi?: string
   teleponPenanggungJawab: string
   jenisLomba: string
   tanggalDaftar: string
@@ -124,15 +126,24 @@ export const pendaftaranService = {
         ])
       }
       
-      await sheet.addRow({
-        'Nama Tim': data.namaTim,
-        'Unit': data.unit,
+      // Handle different field names based on competition type
+      const rowData: any = {
         'Telepon Penanggung Jawab': data.teleponPenanggungJawab,
         'Jenis Lomba': data.jenisLomba,
         'Tanggal Daftar': data.tanggalDaftar,
         'Status': data.status,
         'Catatan': data.catatan || ''
-      })
+      }
+      
+      if (data.jenisLomba === 'Video TikTok') {
+        rowData['Nama Tim'] = data.usernameAkun || ''
+        rowData['Unit'] = data.asalInstansi || ''
+      } else {
+        rowData['Nama Tim'] = data.namaTim || ''
+        rowData['Unit'] = data.unit || ''
+      }
+      
+      await sheet.addRow(rowData)
     } catch (error) {
       console.error('Error creating pendaftaran:', error)
       throw new Error('Gagal menambah pendaftaran: ' + (error instanceof Error ? error.message : 'Unknown error'))
@@ -155,16 +166,24 @@ export const pendaftaranService = {
       for (const sheet of doc.sheetsByIndex) {
         try {
           const rows = await sheet.getRows()
-          const sheetData = rows.map((row, index) => ({
-            id: `${sheet.title}_${index + 1}`,
-            namaTim: row.get('Nama Tim') || '',
-            unit: row.get('Unit') || '',
-            teleponPenanggungJawab: row.get('Telepon Penanggung Jawab') || '',
-            jenisLomba: row.get('Jenis Lomba') || '',
-            tanggalDaftar: row.get('Tanggal Daftar') || '',
-            status: (row.get('Status') as 'pending' | 'approved' | 'rejected') || 'pending',
-            catatan: row.get('Catatan') || ''
-          }))
+          const sheetData = rows.map((row, index) => {
+            const jenisLomba = row.get('Jenis Lomba') || ''
+            const namaTim = row.get('Nama Tim') || ''
+            const unit = row.get('Unit') || ''
+            
+            return {
+              id: `${sheet.title}_${index + 1}`,
+              namaTim: jenisLomba === 'Video TikTok' ? '' : namaTim,
+              unit: jenisLomba === 'Video TikTok' ? '' : unit,
+              usernameAkun: jenisLomba === 'Video TikTok' ? namaTim : '',
+              asalInstansi: jenisLomba === 'Video TikTok' ? unit : '',
+              teleponPenanggungJawab: row.get('Telepon Penanggung Jawab') || '',
+              jenisLomba: jenisLomba,
+              tanggalDaftar: row.get('Tanggal Daftar') || '',
+              status: (row.get('Status') as 'pending' | 'approved' | 'rejected') || 'pending',
+              catatan: row.get('Catatan') || ''
+            }
+          })
           allPendaftaran.push(...sheetData)
         } catch (error) {
           console.error(`Error reading sheet ${sheet.title}:`, error)

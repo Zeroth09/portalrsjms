@@ -28,8 +28,18 @@ export async function POST(request: NextRequest) {
   try {
     const body: PendaftaranData = await request.json()
     
-    // Validasi data
-    if (!body.namaTim || !body.unit || !body.teleponPenanggungJawab || !body.jenisLomba) {
+    // Validasi data berdasarkan jenis lomba
+    let isValid = false
+    
+    if (body.jenisLomba === 'Video TikTok') {
+      // Validasi untuk Video TikTok (usernameAkun, asalInstansi opsional, teleponPenanggungJawab)
+      isValid = !!(body.usernameAkun && body.teleponPenanggungJawab && body.jenisLomba)
+    } else {
+      // Validasi untuk lomba lain (namaTim, unit, teleponPenanggungJawab)
+      isValid = !!(body.namaTim && body.unit && body.teleponPenanggungJawab && body.jenisLomba)
+    }
+    
+    if (!isValid) {
       return NextResponse.json(
         { success: false, error: 'Data tidak lengkap' },
         { status: 400 }
