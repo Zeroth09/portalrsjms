@@ -92,6 +92,7 @@ export default function HomePage() {
         isOpen={showTimelineModal} 
         onClose={() => setShowTimelineModal(false)} 
       />
+      
       {/* Header */}
       <header className="relative overflow-hidden">
         <motion.div 
@@ -273,8 +274,6 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-
-
       </main>
 
       {/* Footer */}
@@ -298,7 +297,6 @@ export default function HomePage() {
               <span>RSJ Mutiara Sukma</span>
             </div>
           </div>
-
         </div>
       </footer>
     </div>
