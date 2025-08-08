@@ -99,7 +99,7 @@ export default function AdminPage() {
   }
 
   // Get unique jenis lomba untuk filter
-  const uniqueJenisLomba = [...new Set(pendaftaran.map(item => item.jenisLomba))]
+  const uniqueJenisLomba = Array.from(new Set(pendaftaran.map(item => item.jenisLomba)))
 
   const getStatusColor = (status: string) => {
     switch (status) {
