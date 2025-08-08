@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Lomba Kemerdekaan RI Ke-80 RSJ Mutiara Sukma</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-flag text-danger me-2"></i>
+                    <span class="fw-bold">Portal Lomba Kemerdekaan</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#beranda">Beranda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#lomba">Lomba</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tentang">Tentang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#kontak">Kontak</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.html">
+                                <i class="fas fa-cog me-1"></i>Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        Rayakan Kemerdekaan dengan Kreativitas
+                    </h1>
+                    <p class="lead text-white mb-4">
+                        Ikuti berbagai lomba seru dalam rangka memperingati HUT ke-80 Kemerdekaan Republik Indonesia di RSJ Mutiara Sukma
+                    </p>
+                    <a href="#lomba" class="btn btn-warning btn-lg">
+                        <i class="fas fa-play me-2"></i>Lihat Lomba
+                    </a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop" 
+                         alt="Kemerdekaan Indonesia" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lomba Section -->
+    <section id="lomba" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-danger">Lomba yang Tersedia</h2>
+                <p class="lead">Pilih lomba yang ingin kamu ikuti</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Video Ucapan -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card lomba-card h-100">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper mb-3">
+                                <i class="fas fa-video text-danger"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Video Ucapan HUT RI</h5>
+                            <p class="card-text">Buat video ucapan selamat HUT RI ke-80 dengan durasi maksimal 1 menit</p>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-danger" onclick="showModal('video-ucapan')">
+                                    Daftar Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gobak Sodor -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card lomba-card h-100">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper mb-3">
+                                <i class="fas fa-running text-success"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Gobak Sodor</h5>
+                            <p class="card-text">Lomba beregu 5 orang dengan permainan tradisional gobak sodor</p>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-success" onclick="showModal('gobak-sodor')">
+                                    Daftar Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Duel Kardus Cerdas -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card lomba-card h-100">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper mb-3">
+                                <i class="fas fa-brain text-warning"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Duel Kardus Cerdas</h5>
+                            <p class="card-text">Lomba kecerdasan dengan menggunakan kardus sebagai media</p>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-warning" onclick="showModal('duel-kardus')">
+                                    Daftar Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Pendek TikTok -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card lomba-card h-100">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper mb-3">
+                                <i class="fas fa-mobile-alt text-info"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Video Pendek TikTok</h5>
+                            <p class="card-text">Buat video TikTok tentang kesehatan jiwa dengan durasi 60 detik</p>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-info" onclick="showModal('video-tiktok')">
+                                    Daftar Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sepeda Hias -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card lomba-card h-100">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper mb-3">
+                                <i class="fas fa-bicycle text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Sepeda Hias</h5>
+                            <p class="card-text">Lomba menghias sepeda dengan tema kemerdekaan dan kesehatan jiwa</p>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-primary" onclick="showModal('sepeda-hias')">
+                                    Daftar Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tentang Section -->
+    <section id="tentang" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold text-danger mb-4">Tentang Lomba</h2>
+                    <p class="lead mb-4">
+                        Portal lomba ini diselenggarakan dalam rangka memperingati HUT ke-80 Kemerdekaan Republik Indonesia 
+                        dengan tema "80 Tahun Indonesia Merdeka: Bersatu Berdaulat, Rakyat Sejahtera, Indonesia Maju"
+                    </p>
+                    <div class="row g-4 mt-4">
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <i class="fas fa-users text-success mb-3"></i>
+                                <h5>Peserta Terbuka</h5>
+                                <p>Untuk pegawai RSJ Mutiara Sukma dan masyarakat umum</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <i class="fas fa-trophy text-warning mb-3"></i>
+                                <h5>Hadiah Menarik</h5>
+                                <p>Berbagai hadiah menarik untuk pemenang setiap kategori</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <i class="fas fa-calendar text-danger mb-3"></i>
+                                <h5>Deadline 15 Agustus</h5>
+                                <p>Pendaftaran dan pengumpulan paling lambat 15 Agustus 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kontak Section -->
+    <section id="kontak" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-danger">Kontak Panitia</h2>
+                <p class="lead">Hubungi kami untuk informasi lebih lanjut</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <i class="fas fa-user text-danger mb-3"></i>
+                        <h5>Ida Ayu Sasih, S.Kep., Ns</h5>
+                        <p>Video Ucapan HUT RI</p>
+                        <a href="tel:081907892957" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-phone me-2"></i>081907892957
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <i class="fas fa-user text-success mb-3"></i>
+                        <h5>Jumratul Akbar, S.Kep., Ns</h5>
+                        <p>Gobak Sodor</p>
+                        <a href="tel:085339151308" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-phone me-2"></i>085339151308
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <i class="fas fa-user text-info mb-3"></i>
+                        <h5>Regina Salsa Gandi, S.Kep., Ns</h5>
+                        <p>Video Pendek TikTok</p>
+                        <a href="tel:087862236921" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-phone me-2"></i>087862236921
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container text-center">
+            <p class="mb-0 text-white">
+                &copy; 2025 Portal Lomba Kemerdekaan RI Ke-80 RSJ Mutiara Sukma. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal Forms -->
+    <!-- Video Ucapan Modal -->
+    <div class="modal fade" id="videoUcapanModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-video me-2"></i>Pendaftaran Lomba Video Ucapan HUT RI
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="videoUcapanForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Tim *</label>
+                                <input type="text" class="form-control" name="nama_tim" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Unit *</label>
+                                <input type="text" class="form-control" name="unit" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No. HP Penanggung Jawab *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan Tambahan</label>
+                            <textarea class="form-control" name="catatan" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" onclick="submitForm('videoUcapanForm', 'video-ucapan')">
+                        <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gobak Sodor Modal -->
+    <div class="modal fade" id="gobakSodorModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-running me-2"></i>Pendaftaran Lomba Gobak Sodor
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="gobakSodorForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Tim *</label>
+                                <input type="text" class="form-control" name="nama_tim" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Unit *</label>
+                                <input type="text" class="form-control" name="unit" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No. HP Penanggung Jawab *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Anggota Tim (5 orang) *</label>
+                            <textarea class="form-control" name="anggota_tim" rows="5" 
+                                      placeholder="1. Nama Lengkap 1&#10;2. Nama Lengkap 2&#10;3. Nama Lengkap 3&#10;4. Nama Lengkap 4&#10;5. Nama Lengkap 5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan Tambahan</label>
+                            <textarea class="form-control" name="catatan" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" onclick="submitForm('gobakSodorForm', 'gobak-sodor')">
+                        <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Duel Kardus Modal -->
+    <div class="modal fade" id="duelKardusModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title">
+                        <i class="fas fa-brain me-2"></i>Pendaftaran Lomba Duel Kardus Cerdas
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="duelKardusForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Tim *</label>
+                                <input type="text" class="form-control" name="nama_tim" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Unit *</label>
+                                <input type="text" class="form-control" name="unit" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No. HP Penanggung Jawab *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Anggota Tim *</label>
+                            <input type="number" class="form-control" name="jumlah_anggota" min="1" max="10" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan Tambahan</label>
+                            <textarea class="form-control" name="catatan" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning" onclick="submitForm('duelKardusForm', 'duel-kardus')">
+                        <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video TikTok Modal -->
+    <div class="modal fade" id="videoTiktokModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-mobile-alt me-2"></i>Pendaftaran Lomba Video Pendek TikTok
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="videoTiktokForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Lengkap *</label>
+                                <input type="text" class="form-control" name="nama_lengkap" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Username TikTok *</label>
+                                <input type="text" class="form-control" name="username_tiktok" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No. HP *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea class="form-control" name="alamat" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Judul Video *</label>
+                            <input type="text" class="form-control" name="judul_video" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi Video</label>
+                            <textarea class="form-control" name="deskripsi_video" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-info" onclick="submitForm('videoTiktokForm', 'video-tiktok')">
+                        <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sepeda Hias Modal -->
+    <div class="modal fade" id="sepedaHiasModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-bicycle me-2"></i>Pendaftaran Lomba Sepeda Hias
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="sepedaHiasForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Tim *</label>
+                                <input type="text" class="form-control" name="nama_tim" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Unit *</label>
+                                <input type="text" class="form-control" name="unit" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No. HP Penanggung Jawab *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tema Hiasan *</label>
+                            <input type="text" class="form-control" name="tema_hiasan" 
+                                   placeholder="Contoh: Merah Putih Kemerdekaan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi Konsep</label>
+                            <textarea class="form-control" name="deskripsi_konsep" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan Tambahan</label>
+                            <textarea class="form-control" name="catatan" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="submitForm('sepedaHiasForm', 'sepeda-hias')">
+                        <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-check-circle me-2"></i>Pendaftaran Berhasil
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Terima kasih! Pendaftaran Anda telah berhasil dikirim. Tim kami akan menghubungi Anda segera.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
