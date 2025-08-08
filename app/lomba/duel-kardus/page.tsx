@@ -271,9 +271,9 @@ export default function DuelKardusPage() {
                 Narahubung
               </h3>
               <div className="space-y-2">
-                <p className="font-semibold">Panitia RSJ Mutiara Sukma</p>
-                <p className="text-hijau-100">Bagian Humas</p>
-                <p className="text-2xl font-bold">-</p>
+                <p className="font-semibold">Muhammad Rizkyawansyah</p>
+                <p className="text-hijau-100">(SIRS)</p>
+                <p className="text-2xl font-bold">085155380066</p>
               </div>
             </div>
 

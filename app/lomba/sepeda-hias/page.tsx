@@ -283,9 +283,9 @@ export default function SepedaHiasPage() {
                 Narahubung
               </h3>
               <div className="space-y-2">
-                <p className="font-semibold">Panitia RSJ Mutiara Sukma</p>
-                <p className="text-blue-100">Bagian Humas</p>
-                <p className="text-2xl font-bold">-</p>
+                <p className="font-semibold">Eva Susanti</p>
+                <p className="text-blue-100">(K3LRS)</p>
+                <p className="text-2xl font-bold">081933121398</p>
               </div>
             </div>
 

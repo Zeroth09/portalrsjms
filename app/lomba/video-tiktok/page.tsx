@@ -261,9 +261,9 @@ export default function VideoTikTokPage() {
                 Narahubung
               </h3>
               <div className="space-y-2 text-gray-600">
-                <p>• Sdr. Citra</p>
-                <p>• Telepon: 0812-3456-7892</p>
-                <p>• Email: panitia@rsjms.com</p>
+                <p>• Regina Salsa Gandi, S.Kep., Ns</p>
+                <p>• Unit: Dahlia</p>
+                <p>• Telepon: 087862236921</p>
               </div>
             </div>
 
