@@ -80,6 +80,18 @@ export interface LombaData {
   batasPendaftaran: string
 }
 
+// Mapping jenis lomba ke nama sheet
+const getSheetNameByJenisLomba = (jenisLomba: string): string => {
+  const mapping: { [key: string]: string } = {
+    'Video Ucapan HUT RI': 'Video_Ucapan_HUT_RI',
+    'Gobak Sodor': 'Gobak_Sodor',
+    'Video TikTok': 'Video_TikTok',
+    'Duel Kardus': 'Duel_Kardus',
+    'Sepeda Hias': 'Sepeda_Hias'
+  }
+  return mapping[jenisLomba] || 'Pendaftaran_Umum'
+}
+
 // CRUD Operations untuk Pendaftaran
 export const pendaftaranService = {
   // Create - Menambah pendaftaran baru
@@ -94,7 +106,23 @@ export const pendaftaranService = {
       }
 
       const doc = await initGoogleSheets()
-      const sheet = doc.sheetsByIndex[0] // Sheet pertama untuk pendaftaran
+      const sheetName = getSheetNameByJenisLomba(data.jenisLomba)
+      
+      // Cari sheet berdasarkan nama, jika tidak ada buat baru
+      let sheet = doc.sheetsByTitle[sheetName]
+      if (!sheet) {
+        sheet = await doc.addSheet({ title: sheetName })
+        // Set header untuk sheet baru
+        await sheet.setHeaderRow([
+          'Nama Tim',
+          'Unit',
+          'Telepon Penanggung Jawab', 
+          'Jenis Lomba',
+          'Tanggal Daftar',
+          'Status',
+          'Catatan'
+        ])
+      }
       
       await sheet.addRow({
         'Nama Tim': data.namaTim,
@@ -111,7 +139,7 @@ export const pendaftaranService = {
     }
   },
 
-  // Read - Mengambil semua pendaftaran
+  // Read - Mengambil semua pendaftaran dari semua sheet
   async getAll(): Promise<PendaftaranData[]> {
     try {
       // Fallback untuk testing jika environment variables bermasalah
@@ -121,19 +149,29 @@ export const pendaftaranService = {
       }
 
       const doc = await initGoogleSheets()
-      const sheet = doc.sheetsByIndex[0]
-      const rows = await sheet.getRows()
+      const allPendaftaran: PendaftaranData[] = []
       
-      return rows.map((row, index) => ({
-        id: (index + 1).toString(),
-        namaTim: row.get('Nama Tim') || '',
-        unit: row.get('Unit') || '',
-        teleponPenanggungJawab: row.get('Telepon Penanggung Jawab') || '',
-        jenisLomba: row.get('Jenis Lomba') || '',
-        tanggalDaftar: row.get('Tanggal Daftar') || '',
-        status: (row.get('Status') as 'pending' | 'approved' | 'rejected') || 'pending',
-        catatan: row.get('Catatan') || ''
-      }))
+      // Ambil data dari semua sheet yang ada
+      for (const sheet of doc.sheetsByIndex) {
+        try {
+          const rows = await sheet.getRows()
+          const sheetData = rows.map((row, index) => ({
+            id: `${sheet.title}_${index + 1}`,
+            namaTim: row.get('Nama Tim') || '',
+            unit: row.get('Unit') || '',
+            teleponPenanggungJawab: row.get('Telepon Penanggung Jawab') || '',
+            jenisLomba: row.get('Jenis Lomba') || '',
+            tanggalDaftar: row.get('Tanggal Daftar') || '',
+            status: (row.get('Status') as 'pending' | 'approved' | 'rejected') || 'pending',
+            catatan: row.get('Catatan') || ''
+          }))
+          allPendaftaran.push(...sheetData)
+        } catch (error) {
+          console.error(`Error reading sheet ${sheet.title}:`, error)
+        }
+      }
+      
+      return allPendaftaran
     } catch (error) {
       console.error('Error getting pendaftaran:', error)
       throw new Error('Gagal mengambil data pendaftaran: ' + (error instanceof Error ? error.message : 'Unknown error'))
@@ -161,17 +199,22 @@ export const pendaftaranService = {
       }
 
       const doc = await initGoogleSheets()
-      const sheet = doc.sheetsByIndex[0]
-      const rows = await sheet.getRows()
       
-      const rowIndex = parseInt(id) - 1
-      if (rowIndex >= 0 && rowIndex < rows.length) {
-        const row = rows[rowIndex]
-        row.set('Status', status)
-        if (catatan) {
-          row.set('Catatan', catatan)
+      // Parse ID untuk mendapatkan sheet name dan row index
+      const [sheetName, rowIndexStr] = id.split('_')
+      const rowIndex = parseInt(rowIndexStr) - 1
+      
+      const sheet = doc.sheetsByTitle[sheetName]
+      if (sheet && rowIndex >= 0) {
+        const rows = await sheet.getRows()
+        if (rowIndex < rows.length) {
+          const row = rows[rowIndex]
+          row.set('Status', status)
+          if (catatan) {
+            row.set('Catatan', catatan)
+          }
+          await row.save()
         }
-        await row.save()
       }
     } catch (error) {
       console.error('Error updating status:', error)
@@ -189,12 +232,17 @@ export const pendaftaranService = {
       }
 
       const doc = await initGoogleSheets()
-      const sheet = doc.sheetsByIndex[0]
-      const rows = await sheet.getRows()
       
-      const rowIndex = parseInt(id) - 1
-      if (rowIndex >= 0 && rowIndex < rows.length) {
-        await rows[rowIndex].delete()
+      // Parse ID untuk mendapatkan sheet name dan row index
+      const [sheetName, rowIndexStr] = id.split('_')
+      const rowIndex = parseInt(rowIndexStr) - 1
+      
+      const sheet = doc.sheetsByTitle[sheetName]
+      if (sheet && rowIndex >= 0) {
+        const rows = await sheet.getRows()
+        if (rowIndex < rows.length) {
+          await rows[rowIndex].delete()
+        }
       }
     } catch (error) {
       console.error('Error deleting pendaftaran:', error)
