@@ -1,11 +1,73 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Gamepad2, Calendar, MapPin, Phone, Star, ArrowLeft, Users, Clock, AlertTriangle } from 'lucide-react'
+import { Gamepad2, Calendar, MapPin, Phone, Star, ArrowLeft, Users, Clock, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 
+interface FormData {
+  namaTim: string
+  unit: string
+  teleponPenanggungJawab: string
+}
+
 export default function GobakSodorPage() {
+  const [formData, setFormData] = useState<FormData>({
+    namaTim: '',
+    unit: '',
+    teleponPenanggungJawab: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/pendaftaran', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          jenisLomba: 'Gobak Sodor'
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitStatus('success')
+        setFormData({
+          namaTim: '',
+          unit: '',
+          teleponPenanggungJawab: ''
+        })
+      } else {
+        setSubmitStatus('error')
+        setErrorMessage(result.error || 'Terjadi kesalahan')
+      }
+    } catch (error) {
+      setSubmitStatus('error')
+      setErrorMessage('Terjadi kesalahan pada jaringan')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-oranye-50 via-white to-merah-50">
       {/* Header */}
@@ -50,23 +112,95 @@ export default function GobakSodorPage() {
               <p className="text-gray-600">Pendaftaran dilakukan melalui form online</p>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-center"
-            >
-              <Link
-                href="/pendaftaran/gobak-sodor"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-oranye-600 to-merah-600 text-white rounded-xl font-semibold hover:from-oranye-700 hover:to-merah-700 transition-all duration-300 transform hover:scale-105"
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg"
               >
-                <Gamepad2 className="w-5 h-5" />
-                Daftar Sekarang
-              </Link>
-              <p className="text-sm text-gray-500 mt-4">
-                Klik tombol di atas untuk mendaftar lomba
-              </p>
-            </motion.div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div>
+                    <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
+                    <p className="text-green-700 text-sm">Tim Anda telah terdaftar untuk lomba Gobak Sodor. Tim kami akan menghubungi untuk briefing teknis.</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+              >
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                  <div>
+                    <h3 className="font-semibold text-red-800">Gagal Mendaftar</h3>
+                    <p className="text-red-700 text-sm">{errorMessage}</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="namaTim" className="block text-sm font-medium text-gray-700 mb-2">
+                  Nama Tim *
+                </label>
+                <input
+                  type="text"
+                  id="namaTim"
+                  name="namaTim"
+                  value={formData.namaTim}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oranye-500 focus:border-transparent transition-colors"
+                  placeholder="Masukkan nama tim (5 orang)"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="unit" className="block text-sm font-medium text-gray-700 mb-2">
+                  Unit *
+                </label>
+                <input
+                  type="text"
+                  id="unit"
+                  name="unit"
+                  value={formData.unit}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oranye-500 focus:border-transparent transition-colors"
+                  placeholder="Masukkan nama unit"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="teleponPenanggungJawab" className="block text-sm font-medium text-gray-700 mb-2">
+                  Telepon Penanggung Jawab *
+                </label>
+                <input
+                  type="tel"
+                  id="teleponPenanggungJawab"
+                  name="teleponPenanggungJawab"
+                  value={formData.teleponPenanggungJawab}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oranye-500 focus:border-transparent transition-colors"
+                  placeholder="Masukkan nomor telepon"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-oranye-600 to-merah-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-oranye-700 hover:to-merah-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
+              </button>
+            </form>
           </motion.div>
 
           {/* Info Section */}
