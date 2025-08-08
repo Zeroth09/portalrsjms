@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import {
   Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star, Eye
 } from 'lucide-react'
@@ -72,23 +73,68 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-merah-600 via-oranye-500 to-hijau-600 opacity-90"></div>
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-merah-600 via-oranye-500 to-hijau-600 opacity-90"
+          animate={{
+            background: [
+              "linear-gradient(90deg, #dc2626 0%, #ea580c 50%, #16a34a 100%)",
+              "linear-gradient(90deg, #16a34a 0%, #dc2626 50%, #ea580c 100%)",
+              "linear-gradient(90deg, #ea580c 0%, #16a34a 50%, #dc2626 100%)",
+              "linear-gradient(90deg, #dc2626 0%, #ea580c 50%, #16a34a 100%)"
+            ]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        ></motion.div>
         <div className="relative z-10 container mx-auto px-4 py-16 text-center text-white">
-          <div className="transition-all duration-300">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Star className="w-8 h-8 text-yellow-300" />
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div 
+              className="flex items-center justify-center gap-4 mb-6"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <Star className="w-8 h-8 text-yellow-300" />
+              </motion.div>
               <h1 className="text-4xl md:text-6xl font-bold">
                 Portal Lomba
               </h1>
-              <Star className="w-8 h-8 text-yellow-300" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+              <motion.div
+                animate={{ rotate: [0, -360] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <Star className="w-8 h-8 text-yellow-300" />
+              </motion.div>
+            </motion.div>
+            <motion.h2 
+              className="text-2xl md:text-3xl font-semibold mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               HUT Kemerdekaan RI Ke-80
-            </h2>
-            <p className="text-xl mb-6">
+            </motion.h2>
+            <motion.p 
+              className="text-xl mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               RSJ Mutiara Sukma
-            </p>
-            <div className="flex items-center justify-center gap-4 mt-6 text-sm">
+            </motion.p>
+            <motion.div 
+              className="flex items-center justify-center gap-4 mt-6 text-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <span>17 Agustus 2024</span>
@@ -97,8 +143,13 @@ export default function HomePage() {
                 <MapPin className="w-4 h-4" />
                 <span>RSJ Mutiara Sukma</span>
               </div>
-            </div>
-            <div className="mt-4">
+            </motion.div>
+            <motion.div 
+              className="mt-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 1 }}
+            >
               <Link 
                 href="/admin" 
                 className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
@@ -106,9 +157,8 @@ export default function HomePage() {
                 <Eye className="w-4 h-4" />
                 <span>Lihat Data Pendaftaran</span>
               </Link>
-            </div>
-
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </header>
 
@@ -116,21 +166,58 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-12">
         {/* Pilih Lomba Section */}
         <section className="mb-16">
-          <div className="text-center mb-12 transition-all duration-300">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <motion.h2 
+              className="text-3xl font-bold text-gray-800 mb-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               Pilih Lomba Favoritmu
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            </motion.h2>
+            <motion.p 
+              className="text-gray-600 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               Berbagai lomba seru menanti partisipasi kalian dalam rangka memeriahkan HUT Kemerdekaan RI Ke-80
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {lombaData.map((lomba, index) => (
-              <div key={lomba.id} className="group transition-all duration-300">
+              <motion.div 
+                key={lomba.id} 
+                className="group"
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.8 + (index * 0.1),
+                  type: "spring",
+                  stiffness: 100
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.2 }
+                }}
+              >
                 <Link href={`/lomba/${lomba.id}`}>
                   <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-                    <div className={`${lomba.bgColor} text-white rounded-xl p-4 mb-4 flex items-center justify-center`}>
+                    <motion.div 
+                      className={`${lomba.bgColor} text-white rounded-xl p-4 mb-4 flex items-center justify-center`}
+                      whileHover={{ 
+                        scale: 1.1,
+                        rotate: 5,
+                        transition: { duration: 0.3 }
+                      }}
+                    >
                       <lomba.icon className="w-8 h-8" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">
@@ -143,11 +230,16 @@ export default function HomePage() {
                       <span className="text-sm text-gray-500">
                         Batas: {lomba.batasDaftar}
                       </span>
-                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                      <motion.div
+                        whileHover={{ x: 5 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                      </motion.div>
                     </div>
                   </div>
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>

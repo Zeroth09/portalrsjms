@@ -100,9 +100,13 @@ export default function VideoTikTokPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, x: -50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ 
+              duration: 0.8,
+              type: "spring",
+              stiffness: 100
+            }}
             className="bg-white rounded-2xl shadow-lg p-8"
           >
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Form Pendaftaran</h2>
@@ -140,7 +144,11 @@ export default function VideoTikTokPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
                 <label htmlFor="usernameAkun" className="block text-sm font-medium text-gray-700 mb-2">
                   Username Akun *
                 </label>
@@ -154,9 +162,13 @@ export default function VideoTikTokPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
                   placeholder="Masukkan username TikTok"
                 />
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
                 <label htmlFor="asalInstansi" className="block text-sm font-medium text-gray-700 mb-2">
                   Asal Instansi (Optional)
                 </label>
@@ -169,9 +181,13 @@ export default function VideoTikTokPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
                   placeholder="Masukkan asal instansi (opsional)"
                 />
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
                 <label htmlFor="teleponPenanggungJawab" className="block text-sm font-medium text-gray-700 mb-2">
                   Telepon Penanggung Jawab *
                 </label>
@@ -185,9 +201,13 @@ export default function VideoTikTokPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
                   placeholder="Masukkan nomor telepon"
                 />
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
                 <label htmlFor="linkTikTok" className="block text-sm font-medium text-gray-700 mb-2">
                   Link Postingan TikTok *
                 </label>
@@ -207,9 +227,13 @@ export default function VideoTikTokPage() {
                 <p className="text-sm text-gray-500 mt-1">
                   Pastikan video sudah diupload di TikTok dan gunakan hashtag #rsj_mutiarasukma
                 </p>
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
                 <label htmlFor="buktiFollow" className="block text-sm font-medium text-gray-700 mb-2">
                   Link Screenshot Bukti Follow *
                 </label>
@@ -229,27 +253,52 @@ export default function VideoTikTokPage() {
                 <p className="text-sm text-gray-500 mt-1">
                   Upload screenshot bukti follow akun sosial media RSJ Mutiara Sukma (Instagram/Facebook/TikTok)
                 </p>
-              </div>
+              </motion.div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-hijau-600 to-hijau-700 text-white py-3 px-6 rounded-lg font-semibold hover:from-hijau-700 hover:to-hijau-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+                whileTap={{ 
+                  scale: 0.98,
+                  transition: { duration: 0.1 }
+                }}
               >
                 {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
-              </button>
+              </motion.button>
             </form>
           </motion.div>
 
           {/* Info Section */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ 
+              duration: 0.8, 
+              delay: 0.3,
+              type: "spring",
+              stiffness: 100
+            }}
             className="space-y-6"
           >
             {/* Ketentuan */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <motion.div 
+              className="bg-white rounded-2xl shadow-lg p-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
+            >
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Video className="w-5 h-5 text-hijau-500" />
                 Ketentuan Lomba
@@ -265,10 +314,19 @@ export default function VideoTikTokPage() {
                 <li>• <strong>Wajib follow</strong> akun sosial media RSJ Mutiara Sukma</li>
                 <li>• Upload screenshot bukti follow sebagai syarat pendaftaran</li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Kriteria Penilaian */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <motion.div 
+              className="bg-white rounded-2xl shadow-lg p-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
+            >
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Hash className="w-5 h-5 text-oranye-500" />
                 Kriteria Penilaian
@@ -279,10 +337,19 @@ export default function VideoTikTokPage() {
                 <li>• Pesan dan Makna (20%)</li>
                 <li>• Teknik Pengambilan (10%)</li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Narahubung */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <motion.div 
+              className="bg-white rounded-2xl shadow-lg p-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
+            >
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Phone className="w-5 h-5 text-hijau-500" />
                 Narahubung
@@ -292,10 +359,19 @@ export default function VideoTikTokPage() {
                 <p>• Unit: Dahlia</p>
                 <p>• Telepon: <a href="https://wa.me/6287862236921" target="_blank" rel="noopener noreferrer" className="text-hijau-600 hover:text-hijau-700 font-semibold underline">087862236921</a></p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Batas Pendaftaran */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <motion.div 
+              className="bg-white rounded-2xl shadow-lg p-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
+            >
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-blue-500" />
                 Batas Pendaftaran
@@ -304,7 +380,7 @@ export default function VideoTikTokPage() {
                 <p className="text-lg font-semibold text-red-600">15 Agustus 2024</p>
                 <p className="text-sm text-gray-500 mt-1">Pendaftaran ditutup pada pukul 23:59 WITA</p>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
