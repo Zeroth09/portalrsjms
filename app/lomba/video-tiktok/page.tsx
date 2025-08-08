@@ -6,16 +6,16 @@ import { ArrowLeft, Smartphone, CheckCircle, AlertCircle, Phone, Calendar, Video
 import Link from 'next/link'
 
 interface FormData {
-  namaTim: string
-  unit: string
+  usernameAkun: string
+  asalInstansi: string
   teleponPenanggungJawab: string
   linkTikTok: string
 }
 
 export default function VideoTikTokPage() {
   const [formData, setFormData] = useState<FormData>({
-    namaTim: '',
-    unit: '',
+    usernameAkun: '',
+    asalInstansi: '',
     teleponPenanggungJawab: '',
     linkTikTok: ''
   })
@@ -55,8 +55,8 @@ export default function VideoTikTokPage() {
       if (result.success) {
         setSubmitStatus('success')
         setFormData({
-          namaTim: '',
-          unit: '',
+          usernameAkun: '',
+          asalInstansi: '',
           teleponPenanggungJawab: '',
           linkTikTok: ''
         })
@@ -138,34 +138,33 @@ export default function VideoTikTokPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="namaTim" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nama Tim *
+                <label htmlFor="usernameAkun" className="block text-sm font-medium text-gray-700 mb-2">
+                  Username Akun *
                 </label>
                 <input
                   type="text"
-                  id="namaTim"
-                  name="namaTim"
-                  value={formData.namaTim}
+                  id="usernameAkun"
+                  name="usernameAkun"
+                  value={formData.usernameAkun}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nama tim"
+                  placeholder="Masukkan username TikTok"
                 />
               </div>
 
               <div>
-                <label htmlFor="unit" className="block text-sm font-medium text-gray-700 mb-2">
-                  Unit *
+                <label htmlFor="asalInstansi" className="block text-sm font-medium text-gray-700 mb-2">
+                  Asal Instansi (Optional)
                 </label>
                 <input
                   type="text"
-                  id="unit"
-                  name="unit"
-                  value={formData.unit}
+                  id="asalInstansi"
+                  name="asalInstansi"
+                  value={formData.asalInstansi}
                   onChange={handleInputChange}
-                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nama unit"
+                  placeholder="Masukkan asal instansi (opsional)"
                 />
               </div>
 
@@ -231,6 +230,7 @@ export default function VideoTikTokPage() {
                 Ketentuan Lomba
               </h3>
               <ul className="space-y-2 text-gray-600">
+                <li>• <strong>Peserta:</strong> Masyarakat Umum (tidak termasuk CHRSJMS)</li>
                 <li>• Durasi 15-60 detik</li>
                 <li>• Tema kemerdekaan Indonesia</li>
                 <li>• Upload di TikTok</li>
