@@ -98,11 +98,7 @@ export default function HomePage() {
                 <span>RSJ Mutiara Sukma</span>
               </div>
             </div>
-            <div className="mt-4">
-              <Link href="/admin" className="text-white hover:text-gray-200 transition-colors text-sm underline">
-                Admin Panel
-              </Link>
-            </div>
+
           </div>
         </div>
       </header>
@@ -204,11 +200,7 @@ export default function HomePage() {
               <span>RSJ Mutiara Sukma</span>
             </div>
           </div>
-          <div className="mt-6">
-            <Link href="/admin" className="text-gray-400 hover:text-white transition-colors text-sm">
-              Admin Panel
-            </Link>
-          </div>
+
         </div>
       </footer>
     </div>

@@ -78,9 +78,7 @@ export default function DuelKardusPage() {
               <ArrowLeft className="w-5 h-5" />
               <span>Kembali ke Beranda</span>
             </Link>
-            <Link href="/admin" className="text-white hover:text-gray-200 transition-colors text-sm underline">
-              Admin Panel
-            </Link>
+            
           </div>
           <div className="flex items-center gap-4">
             <Box className="w-12 h-12" />
