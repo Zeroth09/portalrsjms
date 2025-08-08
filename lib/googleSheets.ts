@@ -69,6 +69,7 @@ export interface PendaftaranData {
   tanggalDaftar: string
   status: 'pending' | 'approved' | 'rejected'
   catatan?: string
+  buktiFollow?: string
 }
 
 // Interface untuk data lomba

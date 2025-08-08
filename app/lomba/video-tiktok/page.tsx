@@ -10,6 +10,7 @@ interface FormData {
   asalInstansi: string
   teleponPenanggungJawab: string
   linkTikTok: string
+  buktiFollow: string
 }
 
 export default function VideoTikTokPage() {
@@ -17,7 +18,8 @@ export default function VideoTikTokPage() {
     usernameAkun: '',
     asalInstansi: '',
     teleponPenanggungJawab: '',
-    linkTikTok: ''
+    linkTikTok: '',
+    buktiFollow: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -46,7 +48,7 @@ export default function VideoTikTokPage() {
         body: JSON.stringify({
           ...formData,
           jenisLomba: 'Video TikTok',
-          catatan: `Link TikTok: ${formData.linkTikTok}`
+          catatan: `Link TikTok: ${formData.linkTikTok} | Bukti Follow: ${formData.buktiFollow}`
         }),
       })
 
@@ -58,7 +60,8 @@ export default function VideoTikTokPage() {
           usernameAkun: '',
           asalInstansi: '',
           teleponPenanggungJawab: '',
-          linkTikTok: ''
+          linkTikTok: '',
+          buktiFollow: ''
         })
       } else {
         setSubmitStatus('error')
@@ -206,6 +209,28 @@ export default function VideoTikTokPage() {
                 </p>
               </div>
 
+              <div>
+                <label htmlFor="buktiFollow" className="block text-sm font-medium text-gray-700 mb-2">
+                  Link Screenshot Bukti Follow *
+                </label>
+                <div className="relative">
+                  <input
+                    type="url"
+                    id="buktiFollow"
+                    name="buktiFollow"
+                    value={formData.buktiFollow}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
+                    placeholder="https://drive.google.com/file/d/... atau link screenshot lainnya"
+                  />
+                  <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  Upload screenshot bukti follow akun sosial media RSJ Mutiara Sukma (Instagram/Facebook/TikTok)
+                </p>
+              </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -237,6 +262,8 @@ export default function VideoTikTokPage() {
                 <li>• Tag @rsjmutiarasukma</li>
                 <li>• Gunakan hashtag #rsj_mutiarasukma</li>
                 <li>• Video bebas dari unsur politik dan SARA</li>
+                <li>• <strong>Wajib follow</strong> akun sosial media RSJ Mutiara Sukma</li>
+                <li>• Upload screenshot bukti follow sebagai syarat pendaftaran</li>
               </ul>
             </div>
 

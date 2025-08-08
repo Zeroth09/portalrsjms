@@ -119,27 +119,14 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b relative overflow-hidden">
-        {/* Ornamen background header */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-merah-500 rounded-full translate-x-12 -translate-y-12"></div>
-          <div className="absolute bottom-0 left-0 w-20 h-20 bg-putih rounded-full -translate-x-10 translate-y-10"></div>
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-4 py-6">
+      <header className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
               <ArrowLeft className="w-5 h-5" />
               <span>Kembali ke Beranda</span>
             </Link>
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-800">Data Pendaftaran Lomba</h1>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <div className="w-8 h-1 bg-merah-500 rounded"></div>
-                <div className="w-4 h-1 bg-putih rounded"></div>
-                <div className="w-8 h-1 bg-merah-500 rounded"></div>
-              </div>
-            </div>
+            <h1 className="text-2xl font-bold text-gray-800">Data Pendaftaran Lomba</h1>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Users className="w-4 h-4" />
               <span>{pendaftaran.length} Total Pendaftar</span>

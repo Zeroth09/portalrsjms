@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
     let isValid = false
     
     if (body.jenisLomba === 'Video TikTok') {
-      // Validasi untuk Video TikTok (usernameAkun, asalInstansi opsional, teleponPenanggungJawab)
-      isValid = !!(body.usernameAkun && body.teleponPenanggungJawab && body.jenisLomba)
+      // Validasi untuk Video TikTok (usernameAkun, asalInstansi opsional, teleponPenanggungJawab, buktiFollow)
+      isValid = !!(body.usernameAkun && body.teleponPenanggungJawab && body.jenisLomba && body.buktiFollow)
     } else {
       // Validasi untuk lomba lain (namaTim, unit, teleponPenanggungJawab)
       isValid = !!(body.namaTim && body.unit && body.teleponPenanggungJawab && body.jenisLomba)
