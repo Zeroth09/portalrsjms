@@ -27,7 +27,7 @@ const lombaData = [
     ketentuan: 'Tim 6 orang, durasi 10 menit',
     kriteria: 'Kerjasama, Strategi, Kecepatan',
     narahubung: 'Sdr. Budi (0812-3456-7891)',
-    batasDaftar: '16 Agustus 2024'
+    batasDaftar: '12 Agustus 2024'
   },
   {
     id: 'video-tiktok',
@@ -39,7 +39,7 @@ const lombaData = [
     ketentuan: 'Durasi 15-60 detik, tema kemerdekaan',
     kriteria: 'Kreativitas, Viralitas, Pesan',
     narahubung: 'Sdr. Citra (0812-3456-7892)',
-    batasDaftar: '17 Agustus 2024'
+    batasDaftar: '15 Agustus 2024'
   },
   {
     id: 'duel-kardus',
@@ -51,7 +51,7 @@ const lombaData = [
     ketentuan: 'Bahan utama kardus, durasi 30 menit',
     kriteria: 'Kreativitas, Kerapian, Originalitas',
     narahubung: 'Sdr. Dedi (0812-3456-7893)',
-    batasDaftar: '18 Agustus 2024'
+    batasDaftar: '12 Agustus 2024'
   },
   {
     id: 'sepeda-hias',
@@ -63,7 +63,7 @@ const lombaData = [
     ketentuan: 'Sepeda sendiri, tema kemerdekaan',
     kriteria: 'Kreativitas, Kerapian, Tema',
     narahubung: 'Sdr. Eka (0812-3456-7894)',
-    batasDaftar: '19 Agustus 2024'
+    batasDaftar: '14 Agustus 2024'
   }
 ]
 

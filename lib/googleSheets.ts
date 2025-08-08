@@ -186,7 +186,7 @@ export const lombaData: LombaData[] = [
     ],
     narahubung: 'Sdr. Budi',
     telepon: '0812-3456-7891',
-    batasPendaftaran: '16 Agustus 2024'
+    batasPendaftaran: '12 Agustus 2024'
   },
   {
     id: 'video-tiktok',
@@ -200,7 +200,7 @@ export const lombaData: LombaData[] = [
     ],
     narahubung: 'Sdr. Citra',
     telepon: '0812-3456-7892',
-    batasPendaftaran: '17 Agustus 2024'
+    batasPendaftaran: '15 Agustus 2024'
   },
   {
     id: 'duel-kardus',
@@ -214,7 +214,7 @@ export const lombaData: LombaData[] = [
     ],
     narahubung: 'Sdr. Dedi',
     telepon: '0812-3456-7893',
-    batasPendaftaran: '18 Agustus 2024'
+    batasPendaftaran: '12 Agustus 2024'
   },
   {
     id: 'sepeda-hias',
@@ -228,6 +228,6 @@ export const lombaData: LombaData[] = [
     ],
     narahubung: 'Sdr. Eka',
     telepon: '0812-3456-7894',
-    batasPendaftaran: '19 Agustus 2024'
+    batasPendaftaran: '14 Agustus 2024'
   }
 ] 
