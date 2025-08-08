@@ -153,90 +153,100 @@ export default function HomePage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-              <div className="bg-gradient-to-r from-merah-500 to-merah-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
-                <Star className="w-8 h-8" />
+            <Link href="/lomba/video-ucapan">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full cursor-pointer">
+                <div className="bg-gradient-to-r from-merah-500 to-merah-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Video Ucapan HUT RI
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Buat video ucapan kreatif untuk HUT RI Ke-80
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    Batas: 15 Agustus 2024
+                  </span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Video Ucapan HUT RI
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Buat video ucapan kreatif untuk HUT RI Ke-80
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Batas: 15 Agustus 2024
-                </span>
-              </div>
-            </div>
+            </Link>
 
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-              <div className="bg-gradient-to-r from-oranye-500 to-oranye-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
-                <Star className="w-8 h-8" />
+            <Link href="/lomba/gobak-sodor">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full cursor-pointer">
+                <div className="bg-gradient-to-r from-oranye-500 to-oranye-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Gobak Sodor
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Lomba tradisional gobak sodor antar unit
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    Batas: 12 Agustus 2024
+                  </span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Gobak Sodor
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Lomba tradisional gobak sodor antar unit
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Batas: 12 Agustus 2024
-                </span>
-              </div>
-            </div>
+            </Link>
 
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-              <div className="bg-gradient-to-r from-hijau-500 to-hijau-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
-                <Star className="w-8 h-8" />
+            <Link href="/lomba/video-tiktok">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full cursor-pointer">
+                <div className="bg-gradient-to-r from-hijau-500 to-hijau-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Video TikTok
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Buat konten TikTok bertema kemerdekaan
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    Batas: 15 Agustus 2024
+                  </span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Video TikTok
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Buat konten TikTok bertema kemerdekaan
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Batas: 15 Agustus 2024
-                </span>
-              </div>
-            </div>
+            </Link>
 
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
-                <Star className="w-8 h-8" />
+            <Link href="/lomba/duel-kardus">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full cursor-pointer">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Duel Kardus Cerdas
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    Batas: 12 Agustus 2024
+                  </span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Duel Kardus Cerdas
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Batas: 12 Agustus 2024
-                </span>
-              </div>
-            </div>
+            </Link>
 
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
-                <Star className="w-8 h-8" />
+            <Link href="/lomba/sepeda-hias">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full cursor-pointer">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Sepeda Hias
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Dekorasi sepeda dengan tema kemerdekaan
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    Batas: 14 Agustus 2024
+                  </span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Sepeda Hias
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Dekorasi sepeda dengan tema kemerdekaan
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Batas: 14 Agustus 2024
-                </span>
-              </div>
-            </div>
+            </Link>
           </div>
         </section>
       </main>
