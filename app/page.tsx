@@ -2,54 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import {
-  Users, Video, Gamepad2, Car, Bike, Calendar, MapPin, ArrowRight, Star, Eye
-} from 'lucide-react'
+import { Star, Calendar, MapPin, Eye } from 'lucide-react'
 import Link from 'next/link'
 import TimelineModal from './components/TimelineModal'
-
-const lombaData = [
-  {
-    id: 'video-ucapan',
-    nama: 'Video Ucapan HUT RI',
-    deskripsi: 'Buat video ucapan kreatif untuk HUT RI Ke-80',
-    icon: Video,
-    bgColor: 'bg-gradient-to-r from-merah-500 to-merah-600',
-    batasDaftar: '15 Agustus 2024'
-  },
-  {
-    id: 'gobak-sodor',
-    nama: 'Gobak Sodor',
-    deskripsi: 'Lomba tradisional gobak sodor antar unit',
-    icon: Gamepad2,
-    bgColor: 'bg-gradient-to-r from-oranye-500 to-oranye-600',
-    batasDaftar: '12 Agustus 2024'
-  },
-  {
-    id: 'video-tiktok',
-    nama: 'Video TikTok',
-    deskripsi: 'Buat konten TikTok bertema kemerdekaan',
-    icon: Video,
-    bgColor: 'bg-gradient-to-r from-hijau-500 to-hijau-600',
-    batasDaftar: '15 Agustus 2024'
-  },
-  {
-    id: 'duel-kardus',
-    nama: 'Duel Kardus Cerdas',
-    deskripsi: 'Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus',
-    icon: Car,
-    bgColor: 'bg-gradient-to-r from-purple-500 to-purple-600',
-    batasDaftar: '12 Agustus 2024'
-  },
-  {
-    id: 'sepeda-hias',
-    nama: 'Sepeda Hias',
-    deskripsi: 'Dekorasi sepeda dengan tema kemerdekaan',
-    icon: Bike,
-    bgColor: 'bg-gradient-to-r from-blue-500 to-blue-600',
-    batasDaftar: '14 Agustus 2024'
-  }
-]
 
 export default function HomePage() {
   const [showTimelineModal, setShowTimelineModal] = useState(false)
@@ -198,56 +153,90 @@ export default function HomePage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {lombaData.map((lomba, index) => (
-              <motion.div 
-                key={lomba.id} 
-                className="group"
-                initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.8 + (index * 0.1),
-                  type: "spring",
-                  stiffness: 100
-                }}
-                whileHover={{ 
-                  scale: 1.05,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <Link href={`/lomba/${lomba.id}`}>
-                  <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
-                    <motion.div 
-                      className={`${lomba.bgColor} text-white rounded-xl p-4 mb-4 flex items-center justify-center`}
-                      whileHover={{ 
-                        scale: 1.1,
-                        rotate: 5,
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <lomba.icon className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
-                      {lomba.nama}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {lomba.deskripsi}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">
-                        Batas: {lomba.batasDaftar}
-                      </span>
-                      <motion.div
-                        whileHover={{ x: 5 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
-                      </motion.div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
+              <div className="bg-gradient-to-r from-merah-500 to-merah-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                <Star className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Video Ucapan HUT RI
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Buat video ucapan kreatif untuk HUT RI Ke-80
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Batas: 15 Agustus 2024
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
+              <div className="bg-gradient-to-r from-oranye-500 to-oranye-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                <Star className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Gobak Sodor
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Lomba tradisional gobak sodor antar unit
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Batas: 12 Agustus 2024
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
+              <div className="bg-gradient-to-r from-hijau-500 to-hijau-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                <Star className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Video TikTok
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Buat konten TikTok bertema kemerdekaan
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Batas: 15 Agustus 2024
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                <Star className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Duel Kardus Cerdas
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Lomba duel kecerdasan dengan aktivitas fisik menggunakan kardus
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Batas: 12 Agustus 2024
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 h-full">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 mb-4 flex items-center justify-center">
+                <Star className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Sepeda Hias
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Dekorasi sepeda dengan tema kemerdekaan
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Batas: 14 Agustus 2024
+                </span>
+              </div>
+            </div>
           </div>
         </section>
       </main>
