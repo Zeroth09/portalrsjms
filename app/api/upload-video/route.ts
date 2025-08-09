@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { googleDriveService, UploadVideoData } from '../../../lib/googleDrive'
 
+// Disable default body parser untuk handle large files manually
+export const runtime = 'nodejs'
+export const maxDuration = 300 // 5 minutes timeout
+export const preferredRegion = 'auto'
+
+// Custom config untuk large file uploads
+export const config = {
+  api: {
+    bodyParser: false,
+    responseLimit: false,
+  },
+  maxDuration: 300,
+}
+
 export async function POST(request: NextRequest) {
   try {
     console.log('🎬 Upload video API called')
@@ -14,9 +28,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse form data
-    const formData = await request.formData()
-    console.log('📝 Form data parsed')
+    // Parse form data with increased size limit
+    let formData: FormData
+    try {
+      formData = await request.formData()
+      console.log('📝 Form data parsed successfully')
+    } catch (error) {
+      console.error('❌ Error parsing form data:', error)
+      return NextResponse.json(
+        { success: false, error: 'File too large or invalid format. Maximum size is 100MB.' },
+        { status: 413 }
+      )
+    }
     
     // Get file from form data
     const file = formData.get('video') as File
@@ -46,7 +69,7 @@ export async function POST(request: NextRequest) {
       console.error(`❌ File too large: ${file.size} bytes`)
       return NextResponse.json(
         { success: false, error: 'File size too large. Maximum size is 100MB.' },
-        { status: 400 }
+        { status: 413 }
       )
     }
 
@@ -69,11 +92,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Convert file to buffer
+    // Convert file to buffer with better error handling
     console.log('🔄 Converting file to buffer...')
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-    console.log(`✅ Buffer created: ${buffer.length} bytes`)
+    let buffer: Buffer
+    try {
+      const bytes = await file.arrayBuffer()
+      buffer = Buffer.from(bytes)
+      console.log(`✅ Buffer created: ${buffer.length} bytes`)
+    } catch (error) {
+      console.error('❌ Error converting file to buffer:', error)
+      return NextResponse.json(
+        { success: false, error: 'Error processing file. Please try again.' },
+        { status: 500 }
+      )
+    }
 
     // Prepare upload data
     const uploadData: UploadVideoData = {
@@ -99,7 +131,7 @@ export async function POST(request: NextRequest) {
       console.log('✅ Upload successful:', uploadResult.fileId)
       return NextResponse.json({
         success: true,
-        message: 'Video uploaded successfully',
+        message: 'Video berhasil diupload ke Google Drive',
         data: {
           fileId: uploadResult.fileId,
           fileName: uploadResult.fileName,

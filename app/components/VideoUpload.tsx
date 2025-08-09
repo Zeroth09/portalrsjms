@@ -37,9 +37,14 @@ export default function VideoUpload({
       return 'Hanya file video MP4, MOV, atau AVI yang diperbolehkan'
     }
 
-    // Check file size
+    // Check file size - be more conservative for upload limits
     if (file.size > maxSize) {
-      return 'Ukuran file terlalu besar. Maksimal 100MB'
+      return `Ukuran file terlalu besar (${formatFileSize(file.size)}). Maksimal 100MB untuk menghindari timeout upload.`
+    }
+
+    // Warning for large files
+    if (file.size > 50 * 1024 * 1024) {
+      console.warn(`⚠️ Large file detected: ${formatFileSize(file.size)}. Upload might take longer.`)
     }
 
     return null
