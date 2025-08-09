@@ -2,8 +2,9 @@
 
 import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Users, Calendar, Trophy, Clock, Smartphone, Camera, FileVideo, Link2 } from 'lucide-react'
+import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Users, Calendar, Trophy, Clock, Smartphone, Camera, FileVideo, Link2, Shield, Zap, X, Check } from 'lucide-react'
 import Link from 'next/link'
+import VideoUpload from '../../components/VideoUpload'
 
 interface FormData {
   usernameAkun: string
@@ -26,6 +27,10 @@ export default function VideoTikTokPage() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [showVideoUpload, setShowVideoUpload] = useState(false)
+
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
+  const [uploadError, setUploadError] = useState('')
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -277,78 +282,153 @@ export default function VideoTikTokPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4"
                 >
-                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                     <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2 mb-3">
-                       <Upload className="w-4 h-4" />
-                       Upload Video via Google Forms
-                     </h4>
-                     <p className="text-sm text-blue-700 mb-4">
-                       Upload video backup menggunakan Google Forms - simple dan 100% reliable!
-                     </p>
-                     
-                     {/* Direct Link to Google Forms */}
-                     <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
-                       <div className="flex flex-col items-center gap-4">
-                         <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                           <FileVideo className="w-8 h-8 text-white" />
+                   <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-6">
+                     <div className="flex items-center justify-between mb-6">
+                       <h4 className="text-lg font-semibold text-purple-800 flex items-center gap-2">
+                         <FileVideo className="w-6 h-6" />
+                         Upload Video TikTok
+                       </h4>
+                       <div className="flex items-center gap-2 text-sm text-purple-600">
+                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                         <span>Direct Upload</span>
+                       </div>
+                     </div>
+
+                     {/* Enhanced Upload Area */}
+                     <VideoUpload 
+                       onUploadSuccess={(fileInfo) => {
+                         setUploadStatus('success')
+                         setUploadError('')
+                         console.log('Upload success:', fileInfo)
+                       }}
+                       onUploadError={(error) => {
+                         setUploadStatus('error')
+                         setUploadError(error)
+                       }}
+                       onUploadProgress={(progress) => {
+                         setUploadProgress(progress)
+                         if (progress > 0 && progress < 100) {
+                           setUploadStatus('uploading')
+                         }
+                       }}
+                       formData={{
+                         usernameAkun: formData.usernameAkun,
+                         asalInstansi: formData.asalInstansi,
+                         teleponPenanggungJawab: formData.teleponPenanggungJawab
+                       }}
+                     />
+
+                     {/* Upload Status */}
+                     {uploadStatus === 'uploading' && (
+                       <motion.div 
+                         initial={{ opacity: 0, y: 10 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg"
+                       >
+                         <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                           <div className="flex-1">
+                             <p className="text-sm font-medium text-blue-800">
+                               Uploading video... {uploadProgress}%
+                             </p>
+                             <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
+                               <div 
+                                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                 style={{ width: `${uploadProgress}%` }}
+                               ></div>
+                             </div>
+                           </div>
                          </div>
-                         
+                       </motion.div>
+                     )}
+
+                     {uploadStatus === 'success' && (
+                       <motion.div 
+                         initial={{ opacity: 0, scale: 0.95 }}
+                         animate={{ opacity: 1, scale: 1 }}
+                         className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg"
+                       >
+                         <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                             <Check className="w-4 h-4 text-white" />
+                           </div>
+                           <div>
+                             <p className="text-sm font-medium text-green-800">
+                               ✨ Video berhasil diupload!
+                             </p>
+                             <p className="text-xs text-green-600 mt-1">
+                               Video tersimpan aman di Google Drive
+                             </p>
+                           </div>
+                         </div>
+                       </motion.div>
+                     )}
+
+                     {uploadStatus === 'error' && uploadError && (
+                       <motion.div 
+                         initial={{ opacity: 0, scale: 0.95 }}
+                         animate={{ opacity: 1, scale: 1 }}
+                         className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+                       >
+                         <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                             <X className="w-4 h-4 text-white" />
+                           </div>
+                           <div>
+                             <p className="text-sm font-medium text-red-800">
+                               Upload gagal
+                             </p>
+                             <p className="text-xs text-red-600 mt-1">
+                               {uploadError}
+                             </p>
+                           </div>
+                         </div>
+                       </motion.div>
+                     )}
+
+                     {/* Enhanced Benefits */}
+                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="p-4 bg-white/60 rounded-lg border border-purple-100">
+                         <h5 className="text-sm font-medium text-purple-800 mb-2 flex items-center gap-2">
+                           <Shield className="w-4 h-4" />
+                           100% Secure
+                         </h5>
+                         <p className="text-xs text-purple-600">
+                           Direct upload ke Google Drive yang private dan terenkripsi
+                         </p>
+                       </div>
+                       
+                       <div className="p-4 bg-white/60 rounded-lg border border-purple-100">
+                         <h5 className="text-sm font-medium text-purple-800 mb-2 flex items-center gap-2">
+                           <Zap className="w-4 h-4" />
+                           Fast & Reliable
+                         </h5>
+                         <p className="text-xs text-purple-600">
+                           Upload langsung tanpa limit size, progress real-time
+                         </p>
+                       </div>
+                     </div>
+
+                     {/* Fallback Link */}
+                     <div className="mt-6 pt-4 border-t border-purple-200">
+                       <div className="flex items-center justify-between">
                          <div>
-                           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                             Upload Video TikTok
-                           </h3>
-                           <p className="text-gray-600 mb-4">
-                             Klik tombol di bawah untuk membuka Google Forms dan upload video Anda
+                           <h5 className="text-sm font-medium text-purple-800">
+                             Butuh bantuan upload?
+                           </h5>
+                           <p className="text-xs text-purple-600">
+                             Gunakan Google Forms sebagai backup option
                            </p>
                          </div>
-
                          <a
                            href={googleFormsVideoUploadUrl}
                            target="_blank"
                            rel="noopener noreferrer"
-                           className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                           className="text-purple-600 hover:text-purple-800 text-sm font-medium flex items-center gap-1"
                          >
-                           <Upload className="w-5 h-5" />
-                           Buka Google Forms Upload
-                           <ExternalLink className="w-4 h-4" />
+                           Backup Upload
+                           <ExternalLink className="w-3 h-3" />
                          </a>
-
-                         <div className="flex items-center gap-2 text-sm text-gray-500">
-                           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                           <span>Secure & Direct ke Google Drive</span>
-                         </div>
-                       </div>
-                     </div>
-
-                     <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                       <h5 className="text-sm font-medium text-green-800 mb-2">✨ Mengapa Google Forms?</h5>
-                       <ul className="text-sm text-green-700 space-y-1">
-                         <li>• <strong>Simple</strong>: Langsung upload video, no complex forms</li>
-                         <li>• <strong>Reliable</strong>: 100% menggunakan infrastruktur Google</li>
-                         <li>• <strong>No Limits</strong>: Upload file besar tanpa masalah</li>
-                         <li>• <strong>Secure</strong>: Automatic save ke Google Drive yang aman</li>
-                       </ul>
-                     </div>
-
-                     <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                       <h5 className="text-sm font-medium text-yellow-800 mb-2">📋 Langkah Upload:</h5>
-                       <ol className="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
-                         <li>Klik tombol "Buka Google Forms Upload" di atas</li>
-                         <li>Form akan terbuka di tab baru</li>
-                         <li>Upload video Anda di Google Forms</li>
-                         <li>Setelah selesai, kembali ke tab ini</li>
-                         <li>Submit form pendaftaran utama</li>
-                       </ol>
-                     </div>
-
-                     <div className="mt-4 flex items-center justify-between">
-                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                         <span>Powered by Google</span>
-                       </div>
-                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                         <span>100% Secure</span>
                        </div>
                      </div>
                    </div>
