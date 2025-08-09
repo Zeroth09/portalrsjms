@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ArrowLeft, Search, Filter, Phone, Calendar, Users, Eye, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { ArrowLeft, Search, Phone, Calendar, Users, Eye } from 'lucide-react'
 import Link from 'next/link'
 
 interface PendaftaranData {
@@ -13,7 +13,6 @@ interface PendaftaranData {
   teleponPenanggungJawab: string
   jenisLomba: string
   tanggalDaftar: string
-  status: 'pending' | 'approved' | 'rejected'
   catatan?: string
 }
 
@@ -23,7 +22,6 @@ export default function AdminPage() {
   const [error, setError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterJenisLomba, setFilterJenisLomba] = useState('')
-  const [filterStatus, setFilterStatus] = useState('')
 
   // Fetch data pendaftaran
   useEffect(() => {
@@ -59,35 +57,12 @@ export default function AdminPage() {
       item.jenisLomba.toLowerCase().includes(searchTerm.toLowerCase())
     
     const matchesJenisLomba = filterJenisLomba === '' || item.jenisLomba === filterJenisLomba
-    const matchesStatus = filterStatus === '' || item.status === filterStatus
     
-    return matchesSearch && matchesJenisLomba && matchesStatus
+    return matchesSearch && matchesJenisLomba
   })
 
   // Get unique jenis lomba untuk filter
   const uniqueJenisLomba = Array.from(new Set(pendaftaran.map(item => item.jenisLomba)))
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-800'
-      case 'rejected':
-        return 'bg-red-100 text-red-800'
-      default:
-        return 'bg-yellow-100 text-yellow-800'
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle className="w-4 h-4" />
-      case 'rejected':
-        return <XCircle className="w-4 h-4" />
-      default:
-        return <Clock className="w-4 h-4" />
-    }
-  }
 
   const getDisplayName = (item: PendaftaranData) => {
     if (item.jenisLomba === 'Video TikTok') {
@@ -145,7 +120,7 @@ export default function AdminPage() {
 
         {/* Filter dan Search */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -172,26 +147,11 @@ export default function AdminPage() {
               </select>
             </div>
 
-            {/* Filter Status */}
-            <div>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Semua Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-
             {/* Reset Filter */}
             <button
               onClick={() => {
                 setSearchTerm('')
                 setFilterJenisLomba('')
-                setFilterStatus('')
               }}
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
@@ -220,12 +180,6 @@ export default function AdminPage() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tanggal
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Catatan
                   </th>
                 </tr>
               </thead>
@@ -266,18 +220,6 @@ export default function AdminPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(item.status)}`}>
-                        {getStatusIcon(item.status)}
-                        {item.status === 'pending' ? 'Pending' : 
-                         item.status === 'approved' ? 'Approved' : 'Rejected'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 max-w-xs truncate">
-                        {item.catatan || '-'}
-                      </div>
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -292,7 +234,7 @@ export default function AdminPage() {
                 Tidak ada data pendaftaran
               </h3>
               <p className="text-gray-500">
-                {searchTerm || filterJenisLomba || filterStatus 
+                {searchTerm || filterJenisLomba 
                   ? 'Coba ubah filter atau kata kunci pencarian'
                   : 'Belum ada pendaftaran yang masuk'}
               </p>
@@ -301,50 +243,17 @@ export default function AdminPage() {
         </div>
 
         {/* Summary */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Pendaftar</p>
-                <p className="text-2xl font-bold text-gray-900">{pendaftaran.length}</p>
-              </div>
-              <Users className="w-8 h-8 text-blue-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">
-                  {pendaftaran.filter(p => p.status === 'pending').length}
+        <div className="mt-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-center">
+              <div className="text-center">
+                <Users className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                <p className="text-sm font-medium text-gray-600 mb-2">Total Pendaftar</p>
+                <p className="text-4xl font-bold text-gray-900">{pendaftaran.length}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Data pendaftaran lomba HUT RI Ke-80
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Approved</p>
-                <p className="text-2xl font-bold text-green-600">
-                  {pendaftaran.filter(p => p.status === 'approved').length}
-                </p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Rejected</p>
-                <p className="text-2xl font-bold text-red-600">
-                  {pendaftaran.filter(p => p.status === 'rejected').length}
-                </p>
-              </div>
-              <XCircle className="w-8 h-8 text-red-500" />
             </div>
           </div>
         </div>
