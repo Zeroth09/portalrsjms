@@ -27,9 +27,9 @@ export default function VideoUpload({
   const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Allowed file types and max size - conservative for Base64 upload
+  // Allowed file types and max size - back to 100MB as requested
   const allowedTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/quicktime']
-  const maxSize = 15 * 1024 * 1024 // 15MB for Base64 upload stability
+  const maxSize = 100 * 1024 * 1024 // 100MB as requested
 
   const validateFile = (file: File): string | null => {
     // Check file type
@@ -37,13 +37,13 @@ export default function VideoUpload({
       return 'Hanya file video MP4, MOV, atau AVI yang diperbolehkan'
     }
 
-    // Check file size - conservative for Base64 upload
+    // Check file size - back to 100MB
     if (file.size > maxSize) {
-      return `Ukuran file terlalu besar (${formatFileSize(file.size)}). Maksimal 15MB untuk upload yang stabil.`
+      return `Ukuran file terlalu besar (${formatFileSize(file.size)}). Maksimal 100MB.`
     }
 
-    // Warning for large files (>10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Warning for large files (>50MB)
+    if (file.size > 50 * 1024 * 1024) {
       console.warn(`⚠️ Large file detected: ${formatFileSize(file.size)}. Upload might take longer.`)
     }
 
@@ -184,7 +184,7 @@ export default function VideoUpload({
               
               <div className="text-xs text-gray-400 space-y-1">
                 <p>• Format: MP4, MOV, AVI</p>
-                <p>• Maksimal: 15MB (untuk upload yang stabil)</p>
+                <p>• Maksimal: 100MB (untuk upload yang stabil)</p>
                 <p>• Durasi maksimal: 60 detik</p>
               </div>
             </motion.div>

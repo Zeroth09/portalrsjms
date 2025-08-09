@@ -1,4 +1,9 @@
 {
   "framework": "nextjs",
-  "regions": ["sin1"]
+  "regions": ["sin1"],
+  "functions": {
+    "app/api/upload-video/route.ts": {
+      "maxDuration": 300
+    }
+  }
 } 

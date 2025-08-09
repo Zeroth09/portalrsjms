@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { googleDriveService, UploadVideoData } from '../../../lib/googleDrive'
 
-// Next.js 14 App Router route segment config - conservative for Vercel Hobby
+// Next.js 14 App Router route segment config - increase limits for 100MB support
 export const runtime = 'nodejs'
-export const maxDuration = 60
+export const maxDuration = 300 // Increase to 5 minutes for larger files
 export const preferredRegion = 'auto'
 
 export async function POST(request: NextRequest) {
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
             parseError.message.includes('413') ||
             parseError.message.includes('Request entity too large')) {
           return NextResponse.json(
-            { success: false, error: 'File terlalu besar. Coba kompres video atau gunakan file yang lebih kecil (max 15MB).' },
+            { success: false, error: 'File terlalu besar. Maksimal 100MB untuk upload.' },
             { status: 413 }
           )
         }
@@ -143,23 +143,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Conservative file size validation
-    const maxFileSize = 15 * 1024 * 1024 // 15MB very conservative
-    const warningSize = 10 * 1024 * 1024 // 10MB warning
+    // Update file size validation to 100MB
+    const maxFileSize = 100 * 1024 * 1024 // 100MB as requested
+    const warningSize = 50 * 1024 * 1024 // 50MB warning
     
     if (videoData.length > maxFileSize) {
       console.error(`❌ File too large: ${videoData.length} bytes`)
       return NextResponse.json(
         { 
           success: false, 
-          error: `File terlalu besar (${Math.round(videoData.length / 1024 / 1024)}MB). Maksimal 15MB untuk menghindari error upload.` 
+          error: `File terlalu besar (${Math.round(videoData.length / 1024 / 1024)}MB). Maksimal 100MB.` 
         },
         { status: 413 }
       )
     }
 
     if (videoData.length > warningSize) {
-      console.warn(`⚠️ Large file detected: ${Math.round(videoData.length / 1024 / 1024)}MB`)
+      console.warn(`⚠️ Large file detected: ${Math.round(videoData.length / 1024 / 1024)}MB. Processing with care...`)
     }
 
     // Validate required metadata fields
@@ -189,10 +189,10 @@ export async function POST(request: NextRequest) {
 
     console.log('🚀 Starting Google Drive upload...')
     
-    // Upload to Google Drive with conservative timeout
+    // Upload to Google Drive with longer timeout for large files
     const uploadPromise = googleDriveService.uploadVideo(uploadData)
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Google Drive upload timeout')), 30000) // 30 seconds
+      setTimeout(() => reject(new Error('Google Drive upload timeout')), 240000) // 4 minutes for large files
     })
     
     const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any
@@ -229,7 +229,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { 
             success: false, 
-            error: 'Upload timeout. Coba gunakan file yang lebih kecil atau koneksi yang lebih stabil.' 
+            error: 'Upload timeout. File mungkin terlalu besar atau koneksi lambat.' 
           },
           { status: 408 }
         )
@@ -239,7 +239,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { 
             success: false, 
-            error: 'File terlalu besar untuk diproses. Maksimal 15MB.' 
+            error: 'File terlalu besar untuk diproses. Maksimal 100MB.' 
           },
           { status: 413 }
         )
