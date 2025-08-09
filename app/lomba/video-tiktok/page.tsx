@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Video, Calendar, MapPin, Phone, Star, ArrowLeft, Users, Clock, AlertTriangle, Hash, Instagram } from 'lucide-react'
+import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Users, Calendar, Trophy, Clock, Smartphone, Camera } from 'lucide-react'
 import Link from 'next/link'
 import VideoUpload from '../../components/VideoUpload'
 
@@ -22,110 +22,137 @@ export default function VideoTikTokPage() {
     teleponPenanggungJawab: '',
     linkTikTok: '',
     buktiFollow: '',
-    videoFile: undefined
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // Video upload states
+  // Google Drive Upload States
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
   const [uploadError, setUploadError] = useState('')
+  const [driveFileId, setDriveFileId] = useState<string>('')
+  const [driveFileUrl, setDriveFileUrl] = useState<string>('')
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleFileSelect = (file: File) => {
-    setFormData(prev => ({
-      ...prev,
-      videoFile: file
-    }))
+    setFormData(prev => ({ ...prev, videoFile: file }))
     setUploadStatus('idle')
     setUploadError('')
+    setDriveFileId('')
+    setDriveFileUrl('')
   }
 
   const handleFileRemove = () => {
-    setFormData(prev => ({
-      ...prev,
-      videoFile: undefined
-    }))
+    setFormData(prev => ({ ...prev, videoFile: undefined }))
     setUploadStatus('idle')
     setUploadProgress(0)
     setUploadError('')
+    setDriveFileId('')
+    setDriveFileUrl('')
   }
 
-  const uploadVideoToDrive = async (file: File): Promise<boolean> => {
+  // Google Drive Direct Upload Implementation
+  const uploadToGoogleDrive = async (file: File): Promise<{ fileId: string; webViewLink: string } | null> => {
     try {
       setUploadStatus('uploading')
       setUploadProgress(0)
 
-      // Convert file to Base64 for better compatibility with Vercel
-      const convertToBase64 = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(reader.result as string)
-          reader.onerror = reject
-          reader.readAsDataURL(file)
-        })
-      }
-
-      setUploadProgress(20)
-      console.log('🔄 Converting file to Base64...')
+      // Step 1: Get Google Drive upload URL from our API
+      setUploadProgress(10)
+      console.log('🔗 Getting upload URL from Google Drive...')
       
-      const base64Data = await convertToBase64(file)
-      setUploadProgress(40)
-
-      // Prepare JSON payload with Base64 data
-      const uploadData = {
-        videoBase64: base64Data,
-        filename: file.name,
-        mimeType: file.type,
-        usernameAkun: formData.usernameAkun,
-        asalInstansi: formData.asalInstansi,
-        teleponPenanggungJawab: formData.teleponPenanggungJawab,
-        linkTikTok: formData.linkTikTok,
-        buktiFollow: formData.buktiFollow
-      }
-
-      setUploadProgress(60)
-      console.log('🚀 Uploading to Google Drive...')
-
-      // Use JSON request instead of FormData
-      const response = await fetch('/api/upload-video', {
+      const initResponse = await fetch('/api/drive-upload-init', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(uploadData)
+        body: JSON.stringify({
+          filename: file.name,
+          mimeType: file.type,
+          fileSize: file.size,
+          metadata: {
+            usernameAkun: formData.usernameAkun,
+            asalInstansi: formData.asalInstansi,
+            teleponPenanggungJawab: formData.teleponPenanggungJawab,
+            linkTikTok: formData.linkTikTok,
+          }
+        })
       })
 
-      setUploadProgress(90)
-
-      const result = await response.json()
-      setUploadProgress(100)
-
-      if (result.success) {
-        setUploadStatus('success')
-        console.log('✅ Upload successful:', result.data?.fileId)
-        return true
-      } else {
-        setUploadStatus('error')
-        setUploadError(result.error || 'Upload gagal')
-        console.error('❌ Upload failed:', result.error)
-        return false
+      if (!initResponse.ok) {
+        const error = await initResponse.json()
+        throw new Error(error.error || 'Failed to initialize upload')
       }
+
+      const { uploadUrl, fileId } = await initResponse.json()
+      setUploadProgress(20)
+
+      // Step 2: Upload file directly to Google Drive
+      console.log('⬆️ Uploading file directly to Google Drive...')
+      
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file
+      })
+
+      setUploadProgress(80)
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload file to Google Drive')
+      }
+
+      // Step 3: Get file info and finalize
+      setUploadProgress(90)
+      console.log('✅ Getting file info...')
+      
+      const finalizeResponse = await fetch('/api/drive-upload-finalize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileId: fileId,
+          metadata: {
+            usernameAkun: formData.usernameAkun,
+            asalInstansi: formData.asalInstansi,
+            teleponPenanggungJawab: formData.teleponPenanggungJawab,
+            linkTikTok: formData.linkTikTok,
+            tanggalUpload: new Date().toISOString()
+          }
+        })
+      })
+
+      if (!finalizeResponse.ok) {
+        const error = await finalizeResponse.json()
+        throw new Error(error.error || 'Failed to finalize upload')
+      }
+
+      const result = await finalizeResponse.json()
+      setUploadProgress(100)
+      setUploadStatus('success')
+      
+      console.log('🎉 Upload successful:', result.fileId)
+      return {
+        fileId: result.fileId,
+        webViewLink: result.webViewLink
+      }
+
     } catch (error) {
       setUploadStatus('error')
-      setUploadError('Terjadi kesalahan saat upload. Coba dengan file yang lebih kecil.')
       setUploadProgress(0)
+      const errorMsg = error instanceof Error ? error.message : 'Upload failed'
+      setUploadError(errorMsg)
       console.error('❌ Upload error:', error)
-      return false
+      return null
     }
   }
 
@@ -143,26 +170,40 @@ export default function VideoTikTokPage() {
         return
       }
 
-      // Upload video to Google Drive first (if provided)
+      // Upload video to Google Drive if file is selected
+      let uploadResult = null
       if (formData.videoFile) {
-        const uploadSuccess = await uploadVideoToDrive(formData.videoFile)
-        if (!uploadSuccess) {
+        console.log('🎬 Starting video upload...')
+        uploadResult = await uploadToGoogleDrive(formData.videoFile)
+        
+        if (!uploadResult) {
           setSubmitStatus('error')
           setErrorMessage('Upload video gagal. Silakan coba lagi.')
           return
         }
+
+        setDriveFileId(uploadResult.fileId)
+        setDriveFileUrl(uploadResult.webViewLink)
       }
 
-      // Register to spreadsheet
+      // Register data to spreadsheet
+      const registrationData = {
+        usernameAkun: formData.usernameAkun,
+        asalInstansi: formData.asalInstansi,
+        teleponPenanggungJawab: formData.teleponPenanggungJawab,
+        linkTikTok: formData.linkTikTok,
+        buktiFollow: formData.buktiFollow,
+        jenisLomba: 'Video TikTok',
+        driveFileId: uploadResult?.fileId || '',
+        driveFileUrl: uploadResult?.webViewLink || ''
+      }
+
       const response = await fetch('/api/pendaftaran', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          jenisLomba: 'Video TikTok'
-        }),
+        body: JSON.stringify(registrationData)
       })
 
       const result = await response.json()
@@ -217,56 +258,53 @@ export default function VideoTikTokPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
           <motion.div 
-            initial={{ opacity: 0, x: -50, scale: 0.9 }} 
-            animate={{ opacity: 1, x: 0, scale: 1 }} 
-            transition={{ duration: 0.8, type: "spring", stiffness: 100 }} 
-            className="bg-white rounded-2xl shadow-lg p-8"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white rounded-2xl shadow-xl p-8"
           >
-            <div className="text-center mb-8">
-              <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="inline-block mb-4"
-              >
-                <Star className="w-12 h-12 text-hijau-600" />
-              </motion.div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Daftar Lomba Video TikTok</h2>
-              <p className="text-gray-600">Pendaftaran dilakukan melalui form online</p>
-            </div>
-
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Daftar Lomba Video TikTok</h2>
+            
             {submitStatus === 'success' && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3"
               >
-                <div className="flex items-center gap-3">
-                  <Star className="w-6 h-6 text-green-600" />
-                  <div>
-                    <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
-                    <p className="text-green-700 text-sm">Video TikTok Anda telah terdaftar dan video berhasil diupload. Tim kami akan menghubungi untuk informasi selanjutnya.</p>
-                  </div>
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                <div>
+                  <p className="text-green-800 font-medium">Pendaftaran Berhasil!</p>
+                  <p className="text-green-700 text-sm">Data Anda telah tersimpan dan video berhasil diupload ke Google Drive.</p>
+                  {driveFileUrl && (
+                    <a 
+                      href={driveFileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green-600 hover:text-green-800 text-sm flex items-center gap-1 mt-1"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      Lihat Video di Google Drive
+                    </a>
+                  )}
                 </div>
               </motion.div>
             )}
 
             {submitStatus === 'error' && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3"
               >
-                <div className="flex items-center gap-3">
-                  <AlertTriangle className="w-6 h-6 text-red-600" />
-                  <div>
-                    <h3 className="font-semibold text-red-800">Gagal Mendaftar</h3>
-                    <p className="text-red-700 text-sm">{errorMessage}</p>
-                  </div>
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                <div>
+                  <p className="text-red-800 font-medium">Gagal Mendaftar</p>
+                  <p className="text-red-700 text-sm">{errorMessage}</p>
                 </div>
               </motion.div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Username Akun TikTok */}
               <div>
                 <label htmlFor="usernameAkun" className="block text-sm font-medium text-gray-700 mb-2">
                   Username Akun TikTok *
@@ -277,12 +315,13 @@ export default function VideoTikTokPage() {
                   name="usernameAkun"
                   value={formData.usernameAkun}
                   onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="@username"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan username akun TikTok"
                 />
               </div>
 
+              {/* Asal Instansi */}
               <div>
                 <label htmlFor="asalInstansi" className="block text-sm font-medium text-gray-700 mb-2">
                   Asal Instansi (Optional)
@@ -293,11 +332,12 @@ export default function VideoTikTokPage() {
                   name="asalInstansi"
                   value={formData.asalInstansi}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan asal instansi (opsional)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Nama instansi/sekolah"
                 />
               </div>
 
+              {/* Telepon Penanggung Jawab */}
               <div>
                 <label htmlFor="teleponPenanggungJawab" className="block text-sm font-medium text-gray-700 mb-2">
                   Telepon Penanggung Jawab *
@@ -308,12 +348,13 @@ export default function VideoTikTokPage() {
                   name="teleponPenanggungJawab"
                   value={formData.teleponPenanggungJawab}
                   onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="08xxxxxxxxxx"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nomor telepon"
                 />
               </div>
 
+              {/* Link Postingan TikTok */}
               <div>
                 <label htmlFor="linkTikTok" className="block text-sm font-medium text-gray-700 mb-2">
                   Link Postingan TikTok *
@@ -324,15 +365,16 @@ export default function VideoTikTokPage() {
                   name="linkTikTok"
                   value={formData.linkTikTok}
                   onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="https://tiktok.com/@username/video/..."
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="https://www.tiktok.com/@username/video/..."
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Pastikan video sudah diupload dengan hashtag #rsj_mutiarasukma dan #merdekajiwarsjms
+                  Pastikan video sudah diupload di TikTok dengan hashtag #rsj_mutiarasukma dan #merdekajiwarsrsjms
                 </p>
               </div>
 
+              {/* Link Screenshot Bukti Follow */}
               <div>
                 <label htmlFor="buktiFollow" className="block text-sm font-medium text-gray-700 mb-2">
                   Link Screenshot Bukti Follow *
@@ -343,16 +385,16 @@ export default function VideoTikTokPage() {
                   name="buktiFollow"
                   value={formData.buktiFollow}
                   onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="https://drive.google.com/..."
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hijau-500 focus:border-transparent transition-colors"
-                  placeholder="https://drive.google.com/file/d/... atau link screenshot lainnya"
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Upload screenshot bukti follow akun sosial media RSJ Mutiara Sukma (Instagram/Facebook/TikTok)
                 </p>
               </div>
 
-              {/* Video Upload Section */}
+              {/* Upload Video */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Upload Video (Optional)
@@ -366,153 +408,110 @@ export default function VideoTikTokPage() {
                   errorMessage={uploadError}
                   disabled={isSubmitting}
                 />
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2">
+                    <Upload className="w-4 h-4" />
+                    Petunjuk Upload Video:
+                  </h4>
+                  <ul className="text-sm text-blue-700 mt-2 space-y-1">
+                    <li>• Video akan disimpan secara privat di Google Drive</li>
+                    <li>• Hanya admin yang dapat mengakses folder video</li>
+                    <li>• Pastikan video sudah diupload di TikTok sebelum submit</li>
+                    <li>• Sertakan link TikTok yang valid</li>
+                  </ul>
+                </div>
                 <p className="text-sm text-gray-500 mt-2">
                   Upload video sebagai backup. Video akan disimpan aman di Google Drive privat.
                 </p>
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting || uploadStatus === 'uploading'}
-                className="w-full bg-gradient-to-r from-hijau-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-hijau-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-hijau-600 via-purple-500 to-hijau-600 text-white py-4 px-6 rounded-lg font-medium hover:from-hijau-700 hover:via-purple-600 hover:to-hijau-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
+                {isSubmitting ? 'Mendaftar...' : uploadStatus === 'uploading' ? 'Mengupload Video...' : 'Daftar Sekarang'}
               </button>
             </form>
           </motion.div>
 
           {/* Info Section */}
           <motion.div 
-            initial={{ opacity: 0, x: 50, scale: 0.9 }} 
-            animate={{ opacity: 1, x: 0, scale: 1 }} 
-            transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 100 }} 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            {/* Tema */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-white rounded-xl p-6 shadow-lg"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <Star className="w-5 h-5 text-hijau-600" />
-                Tema Lomba
-              </h3>
-              <p className="text-gray-700 italic">
-                "Rayakan Kemerdekaan dengan Kesehatan Jiwa"
-              </p>
-            </motion.div>
-
-            {/* Peserta */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white rounded-xl p-6 shadow-lg"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <Users className="w-5 h-5 text-purple-600" />
-                Peserta
-              </h3>
-              <p className="text-gray-700">
-                Masyarakat Umum (tidak termasuk CHRSJMS)
-              </p>
-              <p className="text-sm text-red-600 mt-2 font-semibold">
-                ⚠️ Tidak diperbolehkan untuk pegawai RSJMS
-              </p>
-            </motion.div>
-
-            {/* Ketentuan */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white rounded-xl p-6 shadow-lg"
-            >
+            {/* Info Lomba */}
+            <div className="bg-white rounded-2xl shadow-xl p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Video className="w-5 h-5 text-hijau-600" />
-                Ketentuan
+                <Video className="w-5 h-5 text-purple-600" />
+                Info Lomba
               </h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-hijau-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video berdurasi maksimal <strong>60 detik</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Sebelum mengupload video wajib <strong>follow akun resmi RSJ Mutiara Sukma</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-hijau-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Wajib mencantumkan hashtag <strong>#rsj_mutiarasukma</strong> dan <strong>#merdekajiwarsjms</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video berisi kegiatan dalam upaya meningkatkan kesehatan jiwa baik dirumah, lingkungan sekitar maupun di tempat kerja</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-hijau-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video harus <strong>orisinil</strong> dan belum pernah diikutkan dalam lomba lain</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video harus bebas dari unsur <strong>politik dan SARA</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-2 h-2 bg-hijau-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video paling lambat diupload ke akun TikTok dan dikirim ke panitia paling lambat tanggal <strong>18 Agustus 2025</strong></span>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* Kriteria Penilaian */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-white rounded-xl p-6 shadow-lg"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Star className="w-5 h-5 text-purple-600" />
-                Kriteria Penilaian
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Kreativitas</span>
-                  <span className="font-bold text-hijau-600">45%</span>
+              <div className="space-y-3 text-gray-600">
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-4 h-4 text-hijau-600" />
+                  <span>Deadline: 18 Agustus 2025</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Kesesuaian dengan tema</span>
-                  <span className="font-bold text-purple-600">30%</span>
+                <div className="flex items-center gap-3">
+                  <Users className="w-4 h-4 text-purple-600" />
+                  <span>Peserta: Masyarakat Umum (tidak termasuk CHRSJMS)</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Kualitas video & audio</span>
-                  <span className="font-bold text-blue-600">25%</span>
+                <div className="flex items-center gap-3">
+                  <Trophy className="w-4 h-4 text-yellow-600" />
+                  <span>Hadiah: Menarik untuk pemenang</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Contact Info */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="bg-gradient-to-r from-hijau-600 to-purple-600 text-white rounded-xl p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Phone className="w-5 h-5" />
-                Narahubung
-              </h3>
-              <div className="space-y-2">
-                <p className="text-lg font-semibold">Regina Salsa Gandi, S.Kep., Ns (Dahlia)</p>
-                <p className="text-2xl font-bold">
-                  <a href="https://wa.me/6287862236921" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-                    087862236921
-                  </a>
-                </p>
+            {/* Ketentuan Lomba */}
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Ketentuan Lomba</h3>
+              <div className="space-y-4 text-gray-600">
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Tema:</h4>
+                  <p>Konten kreatif bertema kemerdekaan Indonesia yang menginspirasi dan menghibur</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Syarat:</h4>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Video berdurasi maksimal 60 detik</li>
+                    <li>Konten original dan kreatif</li>
+                    <li>Menggunakan hashtag #rsj_mutiarasukma dan #merdekajiwarsrsjms</li>
+                    <li>Follow akun sosial media RSJ Mutiara Sukma</li>
+                    <li>Masyarakat umum (tidak termasuk CHRSJMS)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Kriteria Penilaian:</h4>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Kreativitas dan originalitas</li>
+                    <li>Kesesuaian dengan tema kemerdekaan</li>
+                    <li>Kualitas video dan audio</li>
+                    <li>Engagement (like, comment, share)</li>
+                  </ul>
+                </div>
               </div>
-            </motion.div>
+            </div>
+
+            {/* Narahubung */}
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Narahubung</h3>
+              <div className="space-y-2 text-gray-600">
+                <p className="font-medium">Regina Salsa Gandi, S.Kep., Ns (Dahlia)</p>
+                <a 
+                  href="https://wa.me/6287862236921"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-hijau-600 hover:text-hijau-800 flex items-center gap-2"
+                >
+                  <Smartphone className="w-4 h-4" />
+                  087862236921
+                </a>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
