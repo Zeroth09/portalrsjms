@@ -92,7 +92,7 @@ export default function HomePage() {
             >
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>17 Agustus 2024</span>
+                <span>17 Agustus 2025</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
@@ -166,7 +166,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
-                    Batas: 15 Agustus 2024
+                    Batas: 15 Agustus 2025
                   </span>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
-                    Batas: 12 Agustus 2024
+                    Batas: 12 Agustus 2025
                   </span>
                 </div>
               </div>
@@ -204,7 +204,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
-                    Batas: 15 Agustus 2024
+                    Batas: 18 Agustus 2025
                   </span>
                 </div>
               </div>
@@ -223,7 +223,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
-                    Batas: 12 Agustus 2024
+                    Batas: 12 Agustus 2025
                   </span>
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
-                    Batas: 14 Agustus 2024
+                    Batas: 14 Agustus 2025
                   </span>
                 </div>
               </div>
@@ -264,7 +264,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center gap-6 text-sm text-gray-400">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              <span>17 Agustus 2024</span>
+              <span>17 Agustus 2025</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />

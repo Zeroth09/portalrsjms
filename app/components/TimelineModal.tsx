@@ -50,8 +50,8 @@ const timelineEvents: TimelineEvent[] = [
   },
   {
     date: '15 Agustus',
-    title: 'Deadline Pendaftaran Video TikTok & Video HUT RI',
-    description: 'Batas akhir pendaftaran untuk lomba Video TikTok dan Video Ucapan HUT RI',
+    title: 'Deadline Pendaftaran Video HUT RI',
+    description: 'Batas akhir pendaftaran untuk lomba Video Ucapan HUT RI',
     type: 'deadline'
   },
   {
@@ -65,6 +65,12 @@ const timelineEvents: TimelineEvent[] = [
     title: 'UPACARA BENDERA HUT RI KE-80',
     description: 'Upacara bendera dalam rangka HUT Kemerdekaan RI Ke-80',
     type: 'peak'
+  },
+  {
+    date: '18 Agustus',
+    title: 'Deadline Pendaftaran Video TikTok',
+    description: 'Batas akhir pendaftaran untuk lomba Video TikTok',
+    type: 'deadline'
   }
 ]
 

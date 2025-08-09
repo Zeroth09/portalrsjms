@@ -315,7 +315,7 @@ export default function GobakSodorPage() {
                 Batas Pendaftaran
               </h3>
               <div className="text-center">
-                <p className="text-3xl font-bold text-red-600 mb-2">12 Agustus 2024</p>
+                <p className="text-3xl font-bold text-red-600 mb-2">12 Agustus 2025</p>
                 <p className="text-sm text-gray-500">Pendaftaran ditutup pada pukul 23:59 WITA</p>
               </div>
             </motion.div>

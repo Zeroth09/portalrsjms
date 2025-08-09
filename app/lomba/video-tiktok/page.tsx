@@ -326,7 +326,7 @@ export default function VideoTikTokPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-2 h-2 bg-hijau-600 rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Video paling lambat diupload ke akun TikTok dan dikirim ke panitia paling lambat tanggal <strong>15 Agustus 2025</strong></span>
+                  <span>Video paling lambat diupload ke akun TikTok dan dikirim ke panitia paling lambat tanggal <strong>18 Agustus 2025</strong></span>
                 </li>
               </ul>
             </motion.div>

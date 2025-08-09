@@ -69,7 +69,7 @@ export default function SepedaHiasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-putih to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-putih to-hijau-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-6">
         <div className="container mx-auto px-4">
@@ -84,7 +84,7 @@ export default function SepedaHiasPage() {
             <Bike className="w-12 h-12" />
             <div>
               <h1 className="text-3xl font-bold">Sepeda Hias</h1>
-              <p className="text-blue-100">Lomba Menghias Sepeda dengan Tema Kemerdekaan</p>
+              <p className="text-blue-100">Dekorasi Sepeda dengan Tema Kemerdekaan</p>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function SepedaHiasPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
@@ -111,7 +111,7 @@ export default function SepedaHiasPage() {
                   <CheckCircle className="w-6 h-6 text-green-600" />
                   <div>
                     <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
-                    <p className="text-green-700 text-sm">Tim Anda telah terdaftar untuk lomba Sepeda Hias. Siapkan dekorasi terbaik Anda!</p>
+                    <p className="text-green-700 text-sm">Tim Anda telah terdaftar untuk lomba Sepeda Hias. Mulai siapkan dekorasi terbaik!</p>
                   </div>
                 </div>
               </motion.div>
@@ -193,7 +193,7 @@ export default function SepedaHiasPage() {
           </motion.div>
 
           {/* Info Section */}
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -203,20 +203,11 @@ export default function SepedaHiasPage() {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Star className="w-6 h-6 text-blue-600" />
-                Ketentuan Lomba
+                Ketentuan
               </h3>
               <div className="text-center py-8">
-                <div className="text-4xl font-bold text-blue-600 mb-2">To be Announced</div>
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
                 <p className="text-gray-500">Ketentuan lomba akan diumumkan segera</p>
-              </div>
-            </div>
-
-            {/* Tema Dekorasi */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Tema Dekorasi</h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-blue-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Tema dekorasi akan diumumkan segera</p>
               </div>
             </div>
 
@@ -224,7 +215,7 @@ export default function SepedaHiasPage() {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Kriteria Penilaian</h3>
               <div className="text-center py-8">
-                <div className="text-4xl font-bold text-blue-600 mb-2">To be Announced</div>
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
                 <p className="text-gray-500">Kriteria penilaian akan diumumkan segera</p>
               </div>
             </div>
@@ -233,7 +224,7 @@ export default function SepedaHiasPage() {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Tips Dekorasi</h3>
               <div className="text-center py-8">
-                <div className="text-4xl font-bold text-blue-600 mb-2">To be Announced</div>
+                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
                 <p className="text-gray-500">Tips dekorasi akan diumumkan segera</p>
               </div>
             </div>
@@ -256,13 +247,13 @@ export default function SepedaHiasPage() {
             </div>
 
             {/* Batas Pendaftaran */}
-            <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-2xl shadow-lg p-6">
+            <div className="bg-gradient-to-r from-hijau-500 to-hijau-600 text-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Calendar className="w-6 h-6" />
                 Batas Pendaftaran
               </h3>
-              <p className="text-2xl font-bold">15 Agustus 2025</p>
-              <p className="text-cyan-100 text-sm">Jangan sampai terlambat!</p>
+              <p className="text-2xl font-bold">14 Agustus 2025</p>
+              <p className="text-hijau-100 text-sm">Jangan sampai terlambat!</p>
             </div>
           </motion.div>
         </div>
