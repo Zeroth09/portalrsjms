@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Video, Calendar, MapPin, Phone, Star, ArrowLeft, Users, Clock, AlertTriangle, Hash, Instagram } from 'lucide-react'
 import Link from 'next/link'
+import VideoUpload from '../../components/VideoUpload'
 
 interface FormData {
   usernameAkun: string
@@ -11,6 +12,7 @@ interface FormData {
   teleponPenanggungJawab: string
   linkTikTok: string
   buktiFollow: string
+  videoFile?: File
 }
 
 export default function VideoTikTokPage() {
@@ -19,11 +21,17 @@ export default function VideoTikTokPage() {
     asalInstansi: '',
     teleponPenanggungJawab: '',
     linkTikTok: '',
-    buktiFollow: ''
+    buktiFollow: '',
+    videoFile: undefined
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+
+  // Video upload states
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
+  const [uploadError, setUploadError] = useState('')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -33,6 +41,75 @@ export default function VideoTikTokPage() {
     }))
   }
 
+  const handleFileSelect = (file: File) => {
+    setFormData(prev => ({
+      ...prev,
+      videoFile: file
+    }))
+    setUploadStatus('idle')
+    setUploadError('')
+  }
+
+  const handleFileRemove = () => {
+    setFormData(prev => ({
+      ...prev,
+      videoFile: undefined
+    }))
+    setUploadStatus('idle')
+    setUploadProgress(0)
+    setUploadError('')
+  }
+
+  const uploadVideoToDrive = async (file: File): Promise<boolean> => {
+    try {
+      setUploadStatus('uploading')
+      setUploadProgress(0)
+
+      const uploadFormData = new FormData()
+      uploadFormData.append('video', file)
+      uploadFormData.append('usernameAkun', formData.usernameAkun)
+      uploadFormData.append('asalInstansi', formData.asalInstansi)
+      uploadFormData.append('teleponPenanggungJawab', formData.teleponPenanggungJawab)
+      uploadFormData.append('linkTikTok', formData.linkTikTok)
+      uploadFormData.append('buktiFollow', formData.buktiFollow)
+
+      // Simulate progress (since we can't track real progress easily with fetch)
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval)
+            return 90
+          }
+          return prev + 10
+        })
+      }, 200)
+
+      const response = await fetch('/api/upload-video', {
+        method: 'POST',
+        body: uploadFormData
+      })
+
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+
+      const result = await response.json()
+
+      if (result.success) {
+        setUploadStatus('success')
+        return true
+      } else {
+        setUploadStatus('error')
+        setUploadError(result.error || 'Upload gagal')
+        return false
+      }
+    } catch (error) {
+      setUploadStatus('error')
+      setUploadError('Terjadi kesalahan saat upload')
+      setUploadProgress(0)
+      return false
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -40,6 +117,24 @@ export default function VideoTikTokPage() {
     setErrorMessage('')
 
     try {
+      // Validate required fields
+      if (!formData.usernameAkun || !formData.teleponPenanggungJawab || !formData.linkTikTok || !formData.buktiFollow) {
+        setSubmitStatus('error')
+        setErrorMessage('Semua field wajib diisi')
+        return
+      }
+
+      // Upload video to Google Drive first (if provided)
+      if (formData.videoFile) {
+        const uploadSuccess = await uploadVideoToDrive(formData.videoFile)
+        if (!uploadSuccess) {
+          setSubmitStatus('error')
+          setErrorMessage('Upload video gagal. Silakan coba lagi.')
+          return
+        }
+      }
+
+      // Register to spreadsheet
       const response = await fetch('/api/pendaftaran', {
         method: 'POST',
         headers: {
@@ -60,8 +155,10 @@ export default function VideoTikTokPage() {
           asalInstansi: '',
           teleponPenanggungJawab: '',
           linkTikTok: '',
-          buktiFollow: ''
+          buktiFollow: '',
+          videoFile: undefined
         })
+        handleFileRemove()
       } else {
         setSubmitStatus('error')
         setErrorMessage(result.error || 'Terjadi kesalahan')
@@ -128,7 +225,7 @@ export default function VideoTikTokPage() {
                   <Star className="w-6 h-6 text-green-600" />
                   <div>
                     <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
-                    <p className="text-green-700 text-sm">Video TikTok Anda telah terdaftar. Tim kami akan menghubungi untuk informasi selanjutnya.</p>
+                    <p className="text-green-700 text-sm">Video TikTok Anda telah terdaftar dan video berhasil diupload. Tim kami akan menghubungi untuk informasi selanjutnya.</p>
                   </div>
                 </div>
               </motion.div>
@@ -236,9 +333,28 @@ export default function VideoTikTokPage() {
                 </p>
               </div>
 
+              {/* Video Upload Section */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Upload Video (Optional)
+                </label>
+                <VideoUpload
+                  onFileSelect={handleFileSelect}
+                  onFileRemove={handleFileRemove}
+                  uploadProgress={uploadProgress}
+                  isUploading={uploadStatus === 'uploading'}
+                  uploadStatus={uploadStatus}
+                  errorMessage={uploadError}
+                  disabled={isSubmitting}
+                />
+                <p className="text-sm text-gray-500 mt-2">
+                  Upload video sebagai backup. Video akan disimpan aman di Google Drive privat.
+                </p>
+              </div>
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || uploadStatus === 'uploading'}
                 className="w-full bg-gradient-to-r from-hijau-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-hijau-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
