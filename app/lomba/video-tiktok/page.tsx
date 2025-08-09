@@ -330,32 +330,100 @@ export default function VideoTikTokPage() {
 
             {/* Ketentuan Lomba */}
             <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Ketentuan Lomba</h3>
-              <div className="space-y-4 text-gray-600">
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Tema:</h4>
-                  <p>Konten kreatif bertema kemerdekaan Indonesia yang menginspirasi dan menghibur</p>
-                </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Ketentuan Lomba Video Pendek (TikTok)</h3>
+              <div className="space-y-6 text-gray-600">
                 
+                {/* Tema */}
                 <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Syarat:</h4>
-                  <ul className="space-y-1 list-disc list-inside">
-                    <li>Video berdurasi maksimal 60 detik</li>
-                    <li>Konten original dan kreatif</li>
-                    <li>Menggunakan hashtag #rsj_mutiarasukma dan #merdekajiwarsrsjms</li>
-                    <li>Follow akun sosial media RSJ Mutiara Sukma</li>
-                    <li>Masyarakat umum (tidak termasuk CHRSJMS)</li>
-                  </ul>
+                  <h4 className="font-semibold text-gray-800 mb-2 text-lg">🎯 Tema Lomba:</h4>
+                  <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border-l-4 border-purple-500">
+                    <p className="font-medium text-purple-800">"Rayakan Kemerdekaan dengan Kesehatan Jiwa"</p>
+                  </div>
                 </div>
 
+                {/* Tujuan */}
                 <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Kriteria Penilaian:</h4>
-                  <ul className="space-y-1 list-disc list-inside">
-                    <li>Kreativitas dan originalitas</li>
-                    <li>Kesesuaian dengan tema kemerdekaan</li>
-                    <li>Kualitas video dan audio</li>
-                    <li>Engagement (like, comment, share)</li>
+                  <h4 className="font-semibold text-gray-800 mb-2 text-lg">🎯 Tujuan:</h4>
+                  <ul className="space-y-2 list-disc list-inside ml-4">
+                    <li>Menumbuhkan kesadaran masyarakat akan pentingnya kesehatan jiwa</li>
+                    <li>Menyemarakkan HUT ke-80 Kemerdekaan Republik Indonesia</li>
                   </ul>
+                </div>
+                
+                {/* Ketentuan Utama */}
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-3 text-lg">📋 Ketentuan Utama:</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                      <p>Peserta adalah masyarakat umum dan <strong>tidak diperbolehkan peserta adalah pegawai RSJMS</strong></p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                      <p>Video berdurasi <strong>maksimal 60 detik</strong></p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                      <p>Sebelum mengupload video wajib <strong>follow akun resmi RSJ Mutiara Sukma</strong> dan mencantumkan hashtag <strong>#rsj_mutiarasukma</strong> dan <strong>#merdekajiwarsjms</strong></p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                      <p>Video yang diupload berisi <strong>kegiatan dalam upaya meningkatkan kesehatan jiwa</strong> baik di rumah, lingkungan sekitar maupun di tempat kerja</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">5</div>
+                      <p>Video harus <strong>original dan belum pernah diikutkan dalam lomba lain</strong></p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold">6</div>
+                      <p>Video harus <strong>bebas dari unsur politik dan SARA</strong></p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">7</div>
+                      <p>Video paling lambat harus diupload ke akun TikTok dan dikirim ke link penilaian panitia paling lambat <strong>tanggal 18 Agustus 2025</strong></p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Kriteria Penilaian */}
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-3 text-lg">🏆 Kriteria Penilaian:</h4>
+                  <div className="overflow-hidden rounded-lg border border-gray-200">
+                    <table className="w-full">
+                      <thead className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-semibold">Kriteria</th>
+                          <th className="px-4 py-3 text-center font-semibold">Bobot</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium">Kreativitas</td>
+                          <td className="px-4 py-3 text-center">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                              45%
+                            </span>
+                          </td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium">Kesesuaian dengan tema</td>
+                          <td className="px-4 py-3 text-center">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                              30%
+                            </span>
+                          </td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium">Kualitas video & audio</td>
+                          <td className="px-4 py-3 text-center">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                              25%
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
