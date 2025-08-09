@@ -5,26 +5,30 @@ import { motion } from 'framer-motion'
 import { Upload, X, CheckCircle, AlertCircle, Video, FileText } from 'lucide-react'
 
 interface VideoUploadProps {
-  onFileSelect: (file: File) => void
-  onFileRemove: () => void
-  uploadProgress: number
-  isUploading: boolean
-  uploadStatus: 'idle' | 'uploading' | 'success' | 'error'
-  errorMessage?: string
+  onUploadSuccess?: (fileInfo: any) => void
+  onUploadError?: (error: string) => void
+  onUploadProgress?: (progress: number) => void
+  formData?: {
+    usernameAkun: string
+    asalInstansi?: string
+    teleponPenanggungJawab: string
+  }
   disabled?: boolean
 }
 
 export default function VideoUpload({
-  onFileSelect,
-  onFileRemove,
-  uploadProgress,
-  isUploading,
-  uploadStatus,
-  errorMessage,
+  onUploadSuccess,
+  onUploadError,
+  onUploadProgress,
+  formData,
   disabled = false
 }: VideoUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [dragActive, setDragActive] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [errorMessage, setErrorMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Allowed file types and max size - back to 100MB as requested
@@ -50,20 +54,78 @@ export default function VideoUpload({
     return null
   }
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = async (file: File) => {
     const error = validateFile(file)
     if (error) {
-      alert(error)
+      if (onUploadError) onUploadError(error)
       return
     }
 
     setSelectedFile(file)
-    onFileSelect(file)
+    
+    // Start upload immediately after file selection
+    if (formData) {
+      await startUpload(file)
+    }
+  }
+
+  const startUpload = async (file: File) => {
+    setIsUploading(true)
+    setUploadStatus('uploading')
+    setUploadProgress(0)
+    setErrorMessage('')
+    
+    try {
+      const uploadFormData = new FormData()
+      uploadFormData.append('video', file)
+      uploadFormData.append('metadata', JSON.stringify({
+        ...formData,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadDate: new Date().toISOString()
+      }))
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          const newProgress = Math.min(prev + Math.random() * 10, 95)
+          if (onUploadProgress) onUploadProgress(newProgress)
+          return newProgress
+        })
+      }, 500)
+
+      const response = await fetch('/api/upload-video', {
+        method: 'POST',
+        body: uploadFormData,
+      })
+
+      clearInterval(progressInterval)
+
+      if (response.ok) {
+        const result = await response.json()
+        setUploadStatus('success')
+        setUploadProgress(100)
+        if (onUploadSuccess) onUploadSuccess(result)
+        if (onUploadProgress) onUploadProgress(100)
+      } else {
+        const error = await response.json()
+        throw new Error(error.message || 'Upload failed')
+      }
+    } catch (error) {
+      setUploadStatus('error')
+      const errorMsg = error instanceof Error ? error.message : 'Upload failed'
+      setErrorMessage(errorMsg)
+      if (onUploadError) onUploadError(errorMsg)
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const handleFileRemove = () => {
     setSelectedFile(null)
-    onFileRemove()
+    setUploadStatus('idle')
+    setUploadProgress(0)
+    setErrorMessage('')
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
