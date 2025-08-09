@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Car, CheckCircle, AlertCircle, Phone, Calendar, Trophy } from 'lucide-react'
+import { ArrowLeft, Car, CheckCircle, AlertCircle, Phone, Calendar, Trophy, Users, Smartphone, Shirt, Clock, Shield, Target, Play, Zap, X } from 'lucide-react'
 import Link from 'next/link'
 
 interface FormData {
@@ -199,33 +199,199 @@ export default function DuelKardusPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-6"
           >
-            {/* Ketentuan */}
+            {/* Info Lomba */}
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Car className="w-6 h-6" />
+                Info Lomba
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Tim:</strong> 5 orang per tim</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Jenis:</strong> Lomba beregu dengan kecerdasan</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Pendaftaran:</strong> Sampai 12 Agustus 2025</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Ketentuan Umum */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Trophy className="w-6 h-6 text-purple-600" />
-                Ketentuan
+                <Shield className="w-6 h-6 text-purple-600" />
+                📋 Ketentuan Umum
               </h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Ketentuan lomba akan diumumkan segera</p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-purple-800">Tim Beregu</p>
+                    <p className="text-sm text-purple-700">Lomba bersifat beregu, terdiri dari <strong>5 orang per tim</strong></p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                    <Smartphone className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-blue-800">Smartphone Wajib</p>
+                    <p className="text-sm text-blue-700">Setiap anggota tim <strong>wajib membawa smartphone</strong> masing-masing</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center">
+                    <Shirt className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800">Dress Code</p>
+                    <p className="text-sm text-green-700">Peserta <strong>wajib menggunakan pakaian olahraga</strong></p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-orange-800">Briefing Teknis</p>
+                    <p className="text-sm text-orange-700">Seluruh peserta wajib hadir <strong>30 menit sebelum pertandingan</strong> untuk briefing teknis</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-red-800">Keputusan Mutlak</p>
+                    <p className="text-sm text-red-700">Keputusan juri dan wasit bersifat <strong>mutlak dan tidak dapat diganggu gugat</strong></p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Kriteria */}
+            {/* Teknis Permainan */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Kriteria</h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Kriteria penilaian akan diumumkan segera</p>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Target className="w-6 h-6 text-green-600" />
+                🎯 Teknis Permainan
+              </h3>
+              
+              {/* Tujuan */}
+              <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  Tujuan
+                </h4>
+                <p className="text-green-700">
+                  Masing-masing tim berbaris di sisi berlawanan dari jalur kardus. 
+                  <strong> Tujuan: menjadi tim pertama yang berhasil mengirimkan satu pemainnya sampai ke kardus terakhir di area tim lawan.</strong>
+                </p>
+              </div>
+
+              {/* Alur Permainan */}
+              <div>
+                <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <Play className="w-4 h-4" />
+                  Alur Permainan
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                    <p className="text-sm">Permainan dimulai dengan satu pemain dari masing-masing tim melompat di jalur kardus menuju area lawan</p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                    <p className="text-sm">Saat kedua pemain berpapasan di jalur yang sama, mereka akan berhenti</p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                    <div>
+                      <p className="text-sm font-semibold text-yellow-800">Fase Kuis</p>
+                      <p className="text-sm text-yellow-700">Sebuah pertanyaan akan dikirimkan ke smartphone masing-masing pemain</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                    <div>
+                      <p className="text-sm font-semibold text-green-800">Pemenang Putaran</p>
+                      <p className="text-sm text-green-700">Pemain yang menjawab <strong>benar dan paling cepat</strong> berhak melanjutkan lompatannya menuju area tim lawan</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                    <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">5</div>
+                    <div>
+                      <p className="text-sm font-semibold text-red-800">Konsekuensi</p>
+                      <p className="text-sm text-red-700">Pemain yang menjawab salah atau kalah cepat harus <strong>kembali ke garis awal timnya</strong></p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-bold">6</div>
+                    <p className="text-sm">Jika pemain yang menang berhasil melewati satu kardus, pemain kedua dari tim yang kalah akan memulai lompatannya</p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border-2 border-yellow-300">
+                    <div className="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-sm font-bold">🏆</div>
+                    <div>
+                      <p className="font-bold text-yellow-800">Kondisi Menang</p>
+                      <p className="text-sm text-yellow-700">Pemenang adalah tim yang salah satu pemainnya berhasil mencapai <strong>kardus terakhir di area lawan</strong> lebih dulu. Begitu satu pemain sampai, permainan selesai!</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Tema */}
+            {/* Larangan */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Tema</h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Tema lomba akan diumumkan segera</p>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <X className="w-6 h-6 text-red-600" />
+                🚫 Larangan & Sanksi
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                  <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center">
+                    <X className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-800">Kontak Fisik Kasar</p>
+                    <p className="text-sm text-red-700">Tidak diperkenankan melakukan kontak fisik kasar, mendorong, atau menjatuhkan lawan</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-orange-800">Keluar Jalur</p>
+                    <p className="text-sm text-orange-700">Pemain yang keluar dari jalur kardus dianggap harus <strong>mengulang lompatan</strong> di kardus yang sama</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-4 bg-red-100 rounded-lg border-2 border-red-300">
+                  <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-red-800">Diskualifikasi</p>
+                    <p className="text-sm text-red-700">Menghina wasit atau tim lain akan dikenai sanksi <strong>DISKUALIFIKASI</strong></p>
+                  </div>
+                </div>
               </div>
             </div>
 
