@@ -75,9 +75,14 @@ const GoogleFormsButton = () => (
         </div>
       </div>
       <div className="flex-1">
-        <h4 className="text-sm font-semibold text-blue-800 mb-1">
-          Upload Video Backup
-        </h4>
+        <div className="flex items-center gap-2 mb-1">
+          <h4 className="text-sm font-semibold text-blue-800">
+            Upload Video Backup
+          </h4>
+          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-red-500 text-white">
+            WAJIB DILAKUKAN
+          </span>
+        </div>
         <p className="text-sm text-blue-700 mb-3">
           Upload copy video Anda sebagai backup menggunakan Google Forms. 
           Simple, reliable, dan 100% aman!
