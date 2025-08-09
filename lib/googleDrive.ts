@@ -35,6 +35,8 @@ class GoogleDriveService {
 
   private initializeAuth() {
     try {
+      console.log('=== Google Drive Auth Debug ===')
+      
       // Check for required environment variables
       const requiredEnvVars = [
         'GOOGLE_SERVICE_ACCOUNT_EMAIL',
@@ -44,20 +46,38 @@ class GoogleDriveService {
 
       for (const envVar of requiredEnvVars) {
         if (!process.env[envVar]) {
-          console.error(`Missing required environment variable: ${envVar}`)
+          console.error(`❌ Missing required environment variable: ${envVar}`)
           return
+        } else {
+          console.log(`✅ ${envVar}: Available`)
         }
       }
 
       // Clean and format private key
       let privateKey = process.env.GOOGLE_PRIVATE_KEY!
+      console.log('🔧 Cleaning private key...')
+      
+      // Remove quotes and normalize line breaks
+      privateKey = privateKey.replace(/^"|"$/g, '') // Remove surrounding quotes
       privateKey = privateKey.replace(/\\n/g, '\n')
-      privateKey = privateKey.replace(/"/g, '')
+      privateKey = privateKey.replace(/\\r/g, '\r')
+      privateKey = privateKey.replace(/\\t/g, '\t')
       
       // Ensure proper format
       if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+        console.log('🔧 Adding private key headers...')
         privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`
       }
+
+      // Validate private key format
+      if (!privateKey.includes('-----BEGIN PRIVATE KEY-----') || !privateKey.includes('-----END PRIVATE KEY-----')) {
+        console.error('❌ Invalid private key format')
+        return
+      }
+
+      console.log('✅ Private key format validated')
+      console.log('📧 Service Account Email:', process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL)
+      console.log('📁 Drive Folder ID:', process.env.GOOGLE_DRIVE_FOLDER_ID)
 
       // Initialize JWT auth
       this.auth = new google.auth.JWT(
@@ -69,15 +89,50 @@ class GoogleDriveService {
 
       // Initialize Drive API
       this.drive = google.drive({ version: 'v3', auth: this.auth })
+      console.log('✅ Google Drive service initialized')
 
     } catch (error) {
-      console.error('Error initializing Google Drive auth:', error)
+      console.error('❌ Error initializing Google Drive auth:', error)
+      if (error instanceof Error) {
+        console.error('Error details:', error.message)
+        console.error('Stack trace:', error.stack)
+      }
+    }
+  }
+
+  // Test authentication
+  async testAuth(): Promise<boolean> {
+    try {
+      console.log('🧪 Testing Google Drive authentication...')
+      
+      if (!this.drive || !this.auth) {
+        console.error('❌ Drive service not initialized')
+        return false
+      }
+
+      // Try to access the main folder
+      const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID!
+      const response = await this.drive.files.get({
+        fileId: folderId,
+        fields: 'id, name, mimeType'
+      })
+
+      console.log('✅ Auth test successful. Folder info:', response.data)
+      return true
+    } catch (error) {
+      console.error('❌ Auth test failed:', error)
+      if (error instanceof Error) {
+        console.error('Error message:', error.message)
+      }
+      return false
     }
   }
 
   // Create folder for specific competition if not exists
   private async ensureFolderExists(folderName: string, parentFolderId: string): Promise<string> {
     try {
+      console.log(`📁 Ensuring folder exists: ${folderName} in parent: ${parentFolderId}`)
+      
       // Check if folder already exists
       const query = `name='${folderName}' and parents in '${parentFolderId}' and mimeType='application/vnd.google-apps.folder' and trashed=false`
       
@@ -87,9 +142,11 @@ class GoogleDriveService {
       })
 
       if (response.data.files && response.data.files.length > 0) {
+        console.log(`✅ Folder exists: ${response.data.files[0].id}`)
         return response.data.files[0].id
       }
 
+      console.log(`🔧 Creating new folder: ${folderName}`)
       // Create folder if it doesn't exist
       const folderMetadata = {
         name: folderName,
@@ -102,9 +159,10 @@ class GoogleDriveService {
         fields: 'id'
       })
 
+      console.log(`✅ Folder created: ${folder.data.id}`)
       return folder.data.id
     } catch (error) {
-      console.error('Error ensuring folder exists:', error)
+      console.error('❌ Error ensuring folder exists:', error)
       throw error
     }
   }
@@ -112,15 +170,29 @@ class GoogleDriveService {
   // Upload video file to Google Drive
   async uploadVideo(uploadData: UploadVideoData): Promise<UploadResponse> {
     try {
+      console.log('🚀 Starting video upload process...')
+      
       if (!this.drive || !this.auth) {
+        const errorMsg = 'Google Drive service not initialized properly'
+        console.error('❌', errorMsg)
         return {
           success: false,
-          error: 'Google Drive service not initialized properly'
+          error: errorMsg
+        }
+      }
+
+      // Test authentication first
+      const authTest = await this.testAuth()
+      if (!authTest) {
+        return {
+          success: false,
+          error: 'Authentication failed. Please check service account permissions.'
         }
       }
 
       // Main folder ID from environment
       const mainFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID!
+      console.log('📁 Main folder ID:', mainFolderId)
 
       // Create/get competition folder
       const competitionFolderName = `Video TikTok - ${new Date().getFullYear()}`
@@ -135,6 +207,8 @@ class GoogleDriveService {
       const cleanFilename = uploadData.filename.replace(/[^a-zA-Z0-9.-]/g, '_')
       const finalFilename = `${uploadData.username}_${timestamp}_${cleanFilename}`
 
+      console.log('📄 Final filename:', finalFilename)
+
       // File metadata
       const fileMetadata = {
         name: finalFilename,
@@ -145,14 +219,17 @@ class GoogleDriveService {
       // Upload file
       const media = {
         mimeType: uploadData.mimeType,
-        body: uploadData.file
+        body: Buffer.from(uploadData.file)
       }
 
+      console.log('⬆️ Uploading file to Google Drive...')
       const response = await this.drive.files.create({
         resource: fileMetadata,
         media: media,
         fields: 'id, name, webViewLink, size'
       })
+
+      console.log('✅ File uploaded successfully:', response.data.id)
 
       // Create metadata file
       const metadataContent = JSON.stringify({
@@ -176,6 +253,8 @@ class GoogleDriveService {
         }
       })
 
+      console.log('✅ Metadata file created')
+
       return {
         success: true,
         fileId: response.data.id,
@@ -184,10 +263,38 @@ class GoogleDriveService {
       }
 
     } catch (error) {
-      console.error('Error uploading video to Google Drive:', error)
+      console.error('❌ Error uploading video to Google Drive:', error)
+      
+      let errorMessage = 'Unknown error occurred'
+      if (error instanceof Error) {
+        errorMessage = error.message
+        console.error('Error details:', error.stack)
+      }
+
+      // Check for specific Google API errors
+      if (typeof error === 'object' && error !== null) {
+        const googleError = error as any
+        if (googleError.code) {
+          console.error('Google API Error Code:', googleError.code)
+          switch (googleError.code) {
+            case 403:
+              errorMessage = 'Permission denied. Please check service account has access to the folder.'
+              break
+            case 404:
+              errorMessage = 'Folder not found. Please check GOOGLE_DRIVE_FOLDER_ID is correct.'
+              break
+            case 401:
+              errorMessage = 'Authentication failed. Please check service account credentials.'
+              break
+            default:
+              errorMessage = `Google API Error (${googleError.code}): ${googleError.message}`
+          }
+        }
+      }
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
+        error: errorMessage
       }
     }
   }
