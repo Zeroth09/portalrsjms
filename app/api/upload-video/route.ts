@@ -1,19 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { googleDriveService, UploadVideoData } from '../../../lib/googleDrive'
 
-// Disable default body parser untuk handle large files manually
+// Next.js 14 App Router route segment config
 export const runtime = 'nodejs'
-export const maxDuration = 300 // 5 minutes timeout
+export const maxDuration = 300 // 5 minutes timeout for Vercel Pro
 export const preferredRegion = 'auto'
-
-// Custom config untuk large file uploads
-export const config = {
-  api: {
-    bodyParser: false,
-    responseLimit: false,
-  },
-  maxDuration: 300,
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,15 +19,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse form data with increased size limit
+    // Parse form data with better error handling for large files
     let formData: FormData
     try {
-      formData = await request.formData()
+      // Set a reasonable timeout for form parsing
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Form parsing timeout')), 60000) // 1 minute
+      })
+      
+      const formDataPromise = request.formData()
+      formData = await Promise.race([formDataPromise, timeoutPromise]) as FormData
       console.log('📝 Form data parsed successfully')
     } catch (error) {
       console.error('❌ Error parsing form data:', error)
+      if (error instanceof Error && error.message.includes('timeout')) {
+        return NextResponse.json(
+          { success: false, error: 'Upload timeout. File mungkin terlalu besar atau koneksi lambat.' },
+          { status: 408 }
+        )
+      }
       return NextResponse.json(
-        { success: false, error: 'File too large or invalid format. Maximum size is 100MB.' },
+        { success: false, error: 'File terlalu besar atau format tidak valid. Maksimal 100MB.' },
         { status: 413 }
       )
     }
@@ -63,14 +66,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file size (max 100MB)
+    // Validate file size (max 100MB but recommend smaller)
     const maxSize = 100 * 1024 * 1024 // 100MB in bytes
+    const recommendedSize = 50 * 1024 * 1024 // 50MB recommended
+    
     if (file.size > maxSize) {
       console.error(`❌ File too large: ${file.size} bytes`)
       return NextResponse.json(
         { success: false, error: 'File size too large. Maximum size is 100MB.' },
         { status: 413 }
       )
+    }
+
+    if (file.size > recommendedSize) {
+      console.warn(`⚠️ Large file detected: ${file.size} bytes. Upload may take longer.`)
     }
 
     // Get metadata from form
@@ -124,8 +133,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('🚀 Starting Google Drive upload...')
-    // Upload to Google Drive
-    const uploadResult = await googleDriveService.uploadVideo(uploadData)
+    // Upload to Google Drive with timeout
+    const uploadPromise = googleDriveService.uploadVideo(uploadData)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Google Drive upload timeout')), 240000) // 4 minutes
+    })
+    
+    const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any
 
     if (uploadResult.success) {
       console.log('✅ Upload successful:', uploadResult.fileId)
@@ -148,9 +162,17 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('❌ Error in upload-video API:', error)
+    
     if (error instanceof Error) {
       console.error('Error details:', error.message)
-      console.error('Stack trace:', error.stack)
+      
+      // Handle specific timeout errors
+      if (error.message.includes('timeout')) {
+        return NextResponse.json(
+          { success: false, error: 'Upload timeout. Silakan coba lagi dengan file yang lebih kecil.' },
+          { status: 408 }
+        )
+      }
     }
     
     return NextResponse.json(

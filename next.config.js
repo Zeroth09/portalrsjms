@@ -1,20 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable larger body size for file uploads
-  serverRuntimeConfig: {
-    // Increase body size limit to 100MB
-    bodySizeLimit: '100mb'
+  // Enable experimental features for file uploads
+  experimental: {
+    serverComponentsExternalPackages: ['googleapis', 'google-spreadsheet']
   },
-  // Public runtime config
-  publicRuntimeConfig: {
-    maxFileSize: '100mb'
+  // Images configuration
+  images: {
+    domains: ['images.unsplash.com', 'via.placeholder.com'],
   },
-  // Increase API body size limit
-  api: {
-    bodyParser: {
-      sizeLimit: '100mb'
-    }
-  }
 }
 
 module.exports = nextConfig 
