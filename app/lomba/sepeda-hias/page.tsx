@@ -217,46 +217,130 @@ export default function SepedaHiasPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-white rounded-full"></span>
-                  <span><strong>Jenis:</strong> Lomba Perorangan</span>
+                  <span><strong>Peserta:</strong> Unit kerja/instalasi/bagian di RSJ Mutiara Sukma</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-white rounded-full"></span>
-                  <span><strong>Peserta:</strong> 1 orang per pendaftaran</span>
+                  <span><strong>Tanggal Lomba:</strong> 15 Agustus 2025</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-white rounded-full"></span>
-                  <span><strong>Kategori:</strong> Dekorasi Sepeda</span>
+                  <span><strong>Pendaftaran:</strong> 09 Agustus 2025</span>
                 </div>
               </div>
             </div>
 
-            {/* Ketentuan */}
+            {/* Tema Lomba */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Star className="w-6 h-6 text-purple-600" />
+                🎯 Tema Lomba
+              </h3>
+              <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border-l-4 border-purple-500">
+                <p className="font-bold text-purple-800 text-lg">
+                  "80 Tahun Indonesia Merdeka: Bersatu Berdaulat, Rakyat Sejahtera, Indonesia Maju"
+                </p>
+              </div>
+            </div>
+
+            {/* Tujuan */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">🎯 Tujuan</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full mt-2"></span>
+                  <span>Menumbuhkan semangat nasionalisme dan kreativitas dibidang sepeda hias bagi pegawai RSJ Mutiara Sukma</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-2"></span>
+                  <span>Menyemarakkan HUT ke-80 Kemerdekaan Republik Indonesia</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Ketentuan Umum */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Star className="w-6 h-6 text-blue-600" />
-                Ketentuan
+                📋 Ketentuan Umum
               </h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Ketentuan lomba akan diumumkan segera</p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                  <p>Peserta mempersiapkan diri beserta sepeda dari rumah untuk mengikuti lomba sepeda hias</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                  <p>Lomba diselenggarakan tanggal <strong>15 Agustus 2025</strong></p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                  <div>
+                    <p className="font-semibold mb-2">Rute Perlombaan:</p>
+                    <ul className="text-sm space-y-1 ml-4">
+                      <li>• <strong>Start:</strong> Depan gedung poliklinik</li>
+                      <li>• <strong>Rute:</strong> Ke arah selatan jalan masuk pegawai → melewati depan IGD → belok ke arah timur melewati ruang kenanga → belok ke utara</li>
+                      <li>• <strong>Finish:</strong> Depan instalasi gizi</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                  <p>Pendaftaran dimulai dari tanggal <strong>09 Agustus 2025</strong></p>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">!</div>
+                  <p className="font-bold text-red-800">Keputusan dewan juri TIDAK DAPAT DIGANGGU GUGAT</p>
+                </div>
               </div>
             </div>
 
             {/* Kriteria Penilaian */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Kriteria Penilaian</h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Kriteria penilaian akan diumumkan segera</p>
-              </div>
-            </div>
-
-            {/* Tips Dekorasi */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Tips Dekorasi</h3>
-              <div className="text-center py-8">
-                <div className="text-4xl font-bold text-hijau-600 mb-2">To be Announced</div>
-                <p className="text-gray-500">Tips dekorasi akan diumumkan segera</p>
+              <h3 className="text-xl font-bold text-gray-800 mb-4">🏆 Aspek Penilaian</h3>
+              <div className="overflow-hidden rounded-lg border border-gray-200">
+                <table className="w-full">
+                  <thead className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">Aspek</th>
+                      <th className="px-4 py-3 text-center font-semibold">Bobot</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-4 py-3 font-medium">Keserasian</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                          35%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-4 py-3 font-medium">Keindahan</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                          35%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-4 py-3 font-medium">Makna</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                          30%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="bg-gray-50 font-bold">
+                      <td className="px-4 py-3">Total</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-white">
+                          100%
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
