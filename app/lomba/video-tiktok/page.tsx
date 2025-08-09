@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Calendar, Users, Trophy, Phone } from 'lucide-react'
+import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Calendar, Users, Trophy, Phone, Smartphone } from 'lucide-react'
 import Link from 'next/link'
 
 interface FormData {
