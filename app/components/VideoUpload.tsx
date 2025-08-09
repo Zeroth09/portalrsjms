@@ -101,6 +101,10 @@ export default function VideoUpload({
 
       clearInterval(progressInterval)
 
+      // Debug response
+      console.log('Upload response status:', response.status)
+      console.log('Upload response headers:', response.headers.get('content-type'))
+
       if (response.ok) {
         const result = await response.json()
         setUploadStatus('success')
@@ -108,8 +112,17 @@ export default function VideoUpload({
         if (onUploadSuccess) onUploadSuccess(result)
         if (onUploadProgress) onUploadProgress(100)
       } else {
-        const error = await response.json()
-        throw new Error(error.message || 'Upload failed')
+        // Better error handling for non-JSON responses
+        const contentType = response.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json()
+          throw new Error(error.message || 'Upload failed')
+        } else {
+          // Server returned HTML or other non-JSON response
+          const errorText = await response.text()
+          console.error('Non-JSON error response:', errorText)
+          throw new Error(`Server error (${response.status}): ${response.statusText}`)
+        }
       }
     } catch (error) {
       setUploadStatus('error')

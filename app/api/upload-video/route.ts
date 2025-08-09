@@ -9,6 +9,8 @@ export const preferredRegion = 'auto'
 export async function POST(request: NextRequest) {
   try {
     console.log('🎬 Upload video API called')
+    console.log('📋 Request URL:', request.url)
+    console.log('📋 Request method:', request.method)
     
     // Check if Google Drive is properly configured
     if (!process.env.GOOGLE_DRIVE_FOLDER_ID) {
@@ -80,26 +82,33 @@ export async function POST(request: NextRequest) {
         
         const formData = await request.formData()
         console.log('📝 FormData parsed successfully')
+        console.log('📝 FormData keys:', Array.from(formData.keys()))
         
         // Get file from form data
         const file = formData.get('video') as File
         if (!file) {
+          console.error('❌ No video file found in FormData')
           return NextResponse.json(
             { success: false, error: 'No video file provided' },
             { status: 400 }
           )
         }
 
+        console.log('📁 File received:', file.name, 'Size:', file.size)
+
         // Extract metadata
         const metadataString = formData.get('metadata') as string
+        console.log('📝 Raw metadata string:', metadataString ? metadataString.substring(0, 100) + '...' : 'null')
+        
         let metadata: any = {}
         
         if (metadataString) {
           try {
             metadata = JSON.parse(metadataString)
-            console.log('📝 Metadata parsed:', metadata)
+            console.log('📝 Metadata parsed successfully:', Object.keys(metadata))
           } catch (error) {
             console.error('❌ Error parsing metadata JSON:', error)
+            console.error('❌ Metadata string was:', metadataString)
             return NextResponse.json(
               { success: false, error: 'Metadata tidak valid' },
               { status: 400 }
@@ -114,6 +123,14 @@ export async function POST(request: NextRequest) {
         teleponPenanggungJawab = metadata.teleponPenanggungJawab || formData.get('teleponPenanggungJawab') as string
         linkTikTok = metadata.linkTikTok || formData.get('linkTikTok') as string || ''
         buktiFollow = metadata.buktiFollow || formData.get('buktiFollow') as string || ''
+
+        console.log('👤 Extracted data:', {
+          filename,
+          mimeType,
+          usernameAkun,
+          asalInstansi,
+          teleponPenanggungJawab
+        })
 
         // Convert file to buffer
         const bytes = await file.arrayBuffer()
