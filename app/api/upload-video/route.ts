@@ -91,13 +91,29 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract metadata
+        const metadataString = formData.get('metadata') as string
+        let metadata: any = {}
+        
+        if (metadataString) {
+          try {
+            metadata = JSON.parse(metadataString)
+            console.log('📝 Metadata parsed:', metadata)
+          } catch (error) {
+            console.error('❌ Error parsing metadata JSON:', error)
+            return NextResponse.json(
+              { success: false, error: 'Metadata tidak valid' },
+              { status: 400 }
+            )
+          }
+        }
+
         filename = file.name
         mimeType = file.type
-        usernameAkun = formData.get('usernameAkun') as string
-        asalInstansi = formData.get('asalInstansi') as string || ''
-        teleponPenanggungJawab = formData.get('teleponPenanggungJawab') as string
-        linkTikTok = formData.get('linkTikTok') as string
-        buktiFollow = formData.get('buktiFollow') as string
+        usernameAkun = metadata.usernameAkun || formData.get('usernameAkun') as string
+        asalInstansi = metadata.asalInstansi || formData.get('asalInstansi') as string || ''
+        teleponPenanggungJawab = metadata.teleponPenanggungJawab || formData.get('teleponPenanggungJawab') as string
+        linkTikTok = metadata.linkTikTok || formData.get('linkTikTok') as string || ''
+        buktiFollow = metadata.buktiFollow || formData.get('buktiFollow') as string || ''
 
         // Convert file to buffer
         const bytes = await file.arrayBuffer()
@@ -162,11 +178,11 @@ export async function POST(request: NextRequest) {
       console.warn(`⚠️ Large file detected: ${Math.round(videoData.length / 1024 / 1024)}MB. Processing with care...`)
     }
 
-    // Validate required metadata fields
-    if (!usernameAkun || !teleponPenanggungJawab || !linkTikTok || !buktiFollow) {
+    // Validate required metadata fields - only require basic info for upload
+    if (!usernameAkun || !teleponPenanggungJawab) {
       console.error('❌ Missing required metadata fields')
       return NextResponse.json(
-        { success: false, error: 'Semua field wajib diisi' },
+        { success: false, error: 'Username dan nomor telepon wajib diisi' },
         { status: 400 }
       )
     }
@@ -180,9 +196,10 @@ export async function POST(request: NextRequest) {
       jenisLomba: 'Video TikTok',
       metadata: {
         usernameAkun,
-        asalInstansi,
+        asalInstansi: asalInstansi || '',
         teleponPenanggungJawab,
-        linkTikTok,
+        linkTikTok: linkTikTok || '',
+        buktiFollow: buktiFollow || '',
         tanggalUpload: new Date().toISOString()
       }
     }
