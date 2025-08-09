@@ -277,7 +277,7 @@ export default function VideoTikTokPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4"
                 >
-                                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                      <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2 mb-3">
                        <Upload className="w-4 h-4" />
                        Upload Video via Google Forms
@@ -286,42 +286,70 @@ export default function VideoTikTokPage() {
                        Upload video backup menggunakan Google Forms - simple dan 100% reliable!
                      </p>
                      
-                     {/* Embedded Google Forms */}
-                     <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
-                       <iframe
-                         src={googleFormsVideoUploadUrl}
-                         width="100%"
-                         height="500"
-                         frameBorder="0"
-                         marginHeight={0}
-                         marginWidth={0}
-                         title="Upload Video TikTok"
-                         className="w-full"
-                       >
-                         Loading…
-                       </iframe>
+                     {/* Direct Link to Google Forms */}
+                     <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
+                       <div className="flex flex-col items-center gap-4">
+                         <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                           <FileVideo className="w-8 h-8 text-white" />
+                         </div>
+                         
+                         <div>
+                           <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                             Upload Video TikTok
+                           </h3>
+                           <p className="text-gray-600 mb-4">
+                             Klik tombol di bawah untuk membuka Google Forms dan upload video Anda
+                           </p>
+                         </div>
+
+                         <a
+                           href={googleFormsVideoUploadUrl}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                         >
+                           <Upload className="w-5 h-5" />
+                           Buka Google Forms Upload
+                           <ExternalLink className="w-4 h-4" />
+                         </a>
+
+                         <div className="flex items-center gap-2 text-sm text-gray-500">
+                           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                           <span>Secure & Direct ke Google Drive</span>
+                         </div>
+                       </div>
                      </div>
 
                      <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                       <h5 className="text-sm font-medium text-green-800 mb-2">✨ Simple Upload Process:</h5>
+                       <h5 className="text-sm font-medium text-green-800 mb-2">✨ Mengapa Google Forms?</h5>
                        <ul className="text-sm text-green-700 space-y-1">
-                         <li>• Langsung upload video - no complicated fields!</li>
-                         <li>• 100% reliable menggunakan infrastruktur Google</li>
-                         <li>• No file size limits atau timeout issues</li>
-                         <li>• Automatic save ke Google Drive yang aman</li>
+                         <li>• <strong>Simple</strong>: Langsung upload video, no complex forms</li>
+                         <li>• <strong>Reliable</strong>: 100% menggunakan infrastruktur Google</li>
+                         <li>• <strong>No Limits</strong>: Upload file besar tanpa masalah</li>
+                         <li>• <strong>Secure</strong>: Automatic save ke Google Drive yang aman</li>
                        </ul>
                      </div>
 
-                     <div className="mt-4 flex items-center gap-2">
-                       <Link2 className="w-4 h-4 text-purple-600" />
-                       <a
-                         href={googleFormsVideoUploadUrl}
-                         target="_blank"
-                         rel="noopener noreferrer"
-                         className="text-purple-600 hover:text-purple-800 text-sm font-medium"
-                       >
-                         Buka Google Forms di Tab Baru
-                       </a>
+                     <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                       <h5 className="text-sm font-medium text-yellow-800 mb-2">📋 Langkah Upload:</h5>
+                       <ol className="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
+                         <li>Klik tombol "Buka Google Forms Upload" di atas</li>
+                         <li>Form akan terbuka di tab baru</li>
+                         <li>Upload video Anda di Google Forms</li>
+                         <li>Setelah selesai, kembali ke tab ini</li>
+                         <li>Submit form pendaftaran utama</li>
+                       </ol>
+                     </div>
+
+                     <div className="mt-4 flex items-center justify-between">
+                       <div className="flex items-center gap-2 text-sm text-gray-600">
+                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                         <span>Powered by Google</span>
+                       </div>
+                       <div className="flex items-center gap-2 text-sm text-gray-600">
+                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                         <span>100% Secure</span>
+                       </div>
                      </div>
                    </div>
                 </motion.div>
