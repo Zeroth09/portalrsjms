@@ -65,47 +65,66 @@ export default function VideoTikTokPage() {
       setUploadStatus('uploading')
       setUploadProgress(0)
 
-      const uploadFormData = new FormData()
-      uploadFormData.append('video', file)
-      uploadFormData.append('usernameAkun', formData.usernameAkun)
-      uploadFormData.append('asalInstansi', formData.asalInstansi)
-      uploadFormData.append('teleponPenanggungJawab', formData.teleponPenanggungJawab)
-      uploadFormData.append('linkTikTok', formData.linkTikTok)
-      uploadFormData.append('buktiFollow', formData.buktiFollow)
-
-      // Simulate progress (since we can't track real progress easily with fetch)
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
-          }
-          return prev + 10
+      // Convert file to Base64 for better compatibility with Vercel
+      const convertToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = reject
+          reader.readAsDataURL(file)
         })
-      }, 200)
+      }
 
+      setUploadProgress(20)
+      console.log('🔄 Converting file to Base64...')
+      
+      const base64Data = await convertToBase64(file)
+      setUploadProgress(40)
+
+      // Prepare JSON payload with Base64 data
+      const uploadData = {
+        videoBase64: base64Data,
+        filename: file.name,
+        mimeType: file.type,
+        usernameAkun: formData.usernameAkun,
+        asalInstansi: formData.asalInstansi,
+        teleponPenanggungJawab: formData.teleponPenanggungJawab,
+        linkTikTok: formData.linkTikTok,
+        buktiFollow: formData.buktiFollow
+      }
+
+      setUploadProgress(60)
+      console.log('🚀 Uploading to Google Drive...')
+
+      // Use JSON request instead of FormData
       const response = await fetch('/api/upload-video', {
         method: 'POST',
-        body: uploadFormData
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(uploadData)
       })
 
-      clearInterval(progressInterval)
-      setUploadProgress(100)
+      setUploadProgress(90)
 
       const result = await response.json()
+      setUploadProgress(100)
 
       if (result.success) {
         setUploadStatus('success')
+        console.log('✅ Upload successful:', result.data?.fileId)
         return true
       } else {
         setUploadStatus('error')
         setUploadError(result.error || 'Upload gagal')
+        console.error('❌ Upload failed:', result.error)
         return false
       }
     } catch (error) {
       setUploadStatus('error')
-      setUploadError('Terjadi kesalahan saat upload')
+      setUploadError('Terjadi kesalahan saat upload. Coba dengan file yang lebih kecil.')
       setUploadProgress(0)
+      console.error('❌ Upload error:', error)
       return false
     }
   }
