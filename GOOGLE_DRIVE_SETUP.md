@@ -65,6 +65,10 @@ Dokumentasi lengkap untuk mengonfigurasi Google Drive API agar fitur upload vide
    - URL: `https://drive.google.com/drive/folders/FOLDER_ID_HERE`
    - Copy bagian `FOLDER_ID_HERE`
 
+**⚠️ PENTING**: Gunakan **HANYA ID folder**, bukan full URL!
+- ❌ Wrong: `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu?hl=ID`
+- ✅ Correct: `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu`
+
 ## ⚙️ **Step 4: Environment Variables**
 
 Tambahkan environment variables berikut di Vercel atau server hosting:
@@ -72,7 +76,7 @@ Tambahkan environment variables berikut di Vercel atau server hosting:
 ```env
 # Google Drive Configuration
 GOOGLE_SERVICE_ACCOUNT_EMAIL=portal-lomba-service@your-project-id.iam.gserviceaccount.com
-GOOGLE_DRIVE_FOLDER_ID=your_folder_id_here
+GOOGLE_DRIVE_FOLDER_ID=1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 YOUR_PRIVATE_KEY_FROM_JSON_FILE
 -----END PRIVATE KEY-----"
@@ -86,13 +90,14 @@ YOUR_PRIVATE_KEY_FROM_JSON_FILE
 
 #### 2. `GOOGLE_DRIVE_FOLDER_ID`
 - ID folder yang sudah di-copy di Step 3
+- **HANYA ID**: `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu`
 
 #### 3. `GOOGLE_PRIVATE_KEY`
 - Dari file JSON yang di-download
 - Field: `private_key`
 - **Penting**: Gunakan quotes dan keep format `\n`
 
-### 🔧 **Contoh Setup di Vercel:**
+### 🔧 **Setup di Vercel:**
 
 1. Buka dashboard Vercel project
 2. **Settings** > **Environment Variables**
@@ -101,7 +106,7 @@ YOUR_PRIVATE_KEY_FROM_JSON_FILE
    - **Value**: `portal-lomba-service@your-project-id.iam.gserviceaccount.com`
 4. Add variable:
    - **Name**: `GOOGLE_DRIVE_FOLDER_ID`
-   - **Value**: `1VNTp2Gh6j2SIHpgvqaHcZsvQatxs3GLMycIWh3M_eBQ`
+   - **Value**: `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu`
 5. Add variable:
    - **Name**: `GOOGLE_PRIVATE_KEY`
    - **Value**: Paste private key dengan format lengkap
@@ -152,6 +157,21 @@ Setelah setup, struktur folder di Google Drive akan otomatis:
 
 ## 🚨 **Troubleshooting**
 
+### ❌ **Error: "Upload video gagal. Silakan coba lagi."**
+
+**Penyebab Umum:**
+1. **Wrong Folder ID**: Pastikan HANYA gunakan ID folder
+   - ❌ `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu?hl=ID`
+   - ✅ `1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu`
+
+2. **Service Account belum di-share**: 
+   - Re-share folder dengan service account email
+   - Set permission: **Editor**
+
+3. **Environment Variables salah**:
+   - Check di Vercel Settings > Environment Variables
+   - Restart deployment setelah update
+
 ### ❌ **Error: "Google Drive not configured"**
 - Check environment variables sudah benar
 - Restart deployment di Vercel
@@ -164,6 +184,21 @@ Setelah setup, struktur folder di Google Drive akan otomatis:
 ### ❌ **Error: "Folder access denied"**
 - Re-share folder dengan service account
 - Check folder ID benar
+
+### ⚡ **Quick Fix untuk Error Upload:**
+
+1. **Update Environment Variable di Vercel:**
+   ```
+   GOOGLE_DRIVE_FOLDER_ID=1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu
+   ```
+
+2. **Re-share Google Drive Folder:**
+   - Buka: https://drive.google.com/drive/folders/1Pt3y7CoNrnDO9vffFw_11sbEM0z5pwcu
+   - Share dengan service account email
+   - Permission: Editor
+
+3. **Redeploy Vercel:**
+   - Trigger new deployment setelah update env vars
 
 ## 📞 **Support**
 
