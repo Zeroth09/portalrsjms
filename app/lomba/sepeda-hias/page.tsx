@@ -6,14 +6,14 @@ import { ArrowLeft, Bike, CheckCircle, AlertCircle, Phone, Calendar, Star } from
 import Link from 'next/link'
 
 interface FormData {
-  namaTim: string
+  namaPeserta: string
   unit: string
   teleponPenanggungJawab: string
 }
 
 export default function SepedaHiasPage() {
   const [formData, setFormData] = useState<FormData>({
-    namaTim: '',
+    namaPeserta: '',
     unit: '',
     teleponPenanggungJawab: ''
   })
@@ -42,7 +42,9 @@ export default function SepedaHiasPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
+          namaTim: formData.namaPeserta, // Map nama peserta ke namaTim untuk kompatibilitas API
+          unit: formData.unit,
+          teleponPenanggungJawab: formData.teleponPenanggungJawab,
           jenisLomba: 'Sepeda Hias'
         }),
       })
@@ -52,7 +54,7 @@ export default function SepedaHiasPage() {
       if (result.success) {
         setSubmitStatus('success')
         setFormData({
-          namaTim: '',
+          namaPeserta: '',
           unit: '',
           teleponPenanggungJawab: ''
         })
@@ -84,7 +86,7 @@ export default function SepedaHiasPage() {
             <Bike className="w-12 h-12" />
             <div>
               <h1 className="text-3xl font-bold">Sepeda Hias</h1>
-              <p className="text-blue-100">Dekorasi Sepeda dengan Tema Kemerdekaan</p>
+              <p className="text-blue-100">Lomba Perorangan - Dekorasi Sepeda dengan Tema Kemerdekaan</p>
             </div>
           </div>
         </div>
@@ -99,7 +101,8 @@ export default function SepedaHiasPage() {
             transition={{ duration: 0.6 }}
             className="bg-white rounded-2xl shadow-lg p-8"
           >
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Form Pendaftaran</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Form Pendaftaran</h2>
+            <p className="text-gray-600 mb-6">Lomba perorangan - daftarkan diri Anda sekarang!</p>
             
             {submitStatus === 'success' && (
               <motion.div
@@ -111,7 +114,7 @@ export default function SepedaHiasPage() {
                   <CheckCircle className="w-6 h-6 text-green-600" />
                   <div>
                     <h3 className="font-semibold text-green-800">Pendaftaran Berhasil!</h3>
-                    <p className="text-green-700 text-sm">Tim Anda telah terdaftar untuk lomba Sepeda Hias. Mulai siapkan dekorasi terbaik!</p>
+                    <p className="text-green-700 text-sm">Anda telah terdaftar untuk lomba Sepeda Hias. Mulai siapkan dekorasi terbaik!</p>
                   </div>
                 </div>
               </motion.div>
@@ -135,19 +138,22 @@ export default function SepedaHiasPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="namaTim" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nama Tim *
+                <label htmlFor="namaPeserta" className="block text-sm font-medium text-gray-700 mb-2">
+                  Nama Peserta *
                 </label>
                 <input
                   type="text"
-                  id="namaTim"
-                  name="namaTim"
-                  value={formData.namaTim}
+                  id="namaPeserta"
+                  name="namaPeserta"
+                  value={formData.namaPeserta}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Masukkan nama tim"
+                  placeholder="Masukkan nama peserta"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  Lomba perorangan - satu peserta per pendaftaran
+                </p>
               </div>
 
               <div>
@@ -168,7 +174,7 @@ export default function SepedaHiasPage() {
 
               <div>
                 <label htmlFor="teleponPenanggungJawab" className="block text-sm font-medium text-gray-700 mb-2">
-                  Telepon Penanggung Jawab *
+                  Nomor Telepon *
                 </label>
                 <input
                   type="tel"
@@ -180,6 +186,9 @@ export default function SepedaHiasPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   placeholder="Masukkan nomor telepon"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  Nomor telepon yang dapat dihubungi
+                </p>
               </div>
 
               <button
@@ -199,6 +208,28 @@ export default function SepedaHiasPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-6"
           >
+            {/* Info Lomba */}
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Bike className="w-6 h-6" />
+                Info Lomba
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Jenis:</strong> Lomba Perorangan</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Peserta:</strong> 1 orang per pendaftaran</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-white rounded-full"></span>
+                  <span><strong>Kategori:</strong> Dekorasi Sepeda</span>
+                </div>
+              </div>
+            </div>
+
             {/* Ketentuan */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">

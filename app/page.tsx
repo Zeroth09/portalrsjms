@@ -238,7 +238,7 @@ export default function HomePage() {
                   Sepeda Hias
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Dekorasi sepeda dengan tema kemerdekaan
+                  Lomba perorangan dekorasi sepeda dengan tema kemerdekaan
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">
