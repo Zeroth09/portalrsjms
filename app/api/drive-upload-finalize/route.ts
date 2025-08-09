@@ -60,8 +60,9 @@ export async function POST(request: NextRequest) {
 
     const metadataFilename = `${metadata.usernameAkun}_${new Date().toISOString().replace(/[:.]/g, '-')}_metadata.json`
     
+    // Fix TypeScript error by using proper requestBody structure
     const metadataFileResponse = await drive.files.create({
-      resource: {
+      requestBody: {
         name: metadataFilename,
         parents: fileInfo.parents || []
       },

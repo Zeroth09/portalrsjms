@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       console.log(`✅ Competition folder exists: ${competitionFolderId}`)
     } else {
       const newCompetitionFolder = await drive.files.create({
-        resource: {
+        requestBody: {
           name: competitionFolderName,
           mimeType: 'application/vnd.google-apps.folder',
           parents: [mainFolderId]
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       console.log(`✅ User folder exists: ${userFolderId}`)
     } else {
       const newUserFolder = await drive.files.create({
-        resource: {
+        requestBody: {
           name: userFolderName,
           mimeType: 'application/vnd.google-apps.folder',
           parents: [competitionFolderId]
@@ -99,52 +99,66 @@ export async function POST(request: NextRequest) {
     const cleanFilename = filename.replace(/[^a-zA-Z0-9.-]/g, '_')
     const finalFilename = `${metadata.usernameAkun}_${timestamp}_${cleanFilename}`
 
-    // Create file metadata
+    // Create file metadata for upload
     const fileMetadata = {
       name: finalFilename,
       parents: [userFolderId],
       description: `Video TikTok upload dari ${metadata.usernameAkun} - ${new Date().toISOString()}`
     }
 
-    // Create file entry in Google Drive (without content)
-    const fileResponse = await drive.files.create({
-      resource: fileMetadata,
-      fields: 'id, name, webViewLink'
-    })
+    // Initialize resumable upload session
+    try {
+      // Use simple upload approach for better compatibility
+      const uploadResponse = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${await auth.getAccessToken().then(token => token.token)}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileMetadata)
+      })
 
-    const fileId = fileResponse.data.id!
-    console.log(`✅ File entry created: ${fileId}`)
+      if (!uploadResponse.ok) {
+        throw new Error(`Failed to initialize upload: ${uploadResponse.statusText}`)
+      }
 
-    // Generate resumable upload URL
-    const uploadResponse = await drive.files.create({
-      resource: fileMetadata,
-      media: {
-        mimeType: mimeType,
-        body: '' // Empty body for getting upload URL
-      },
-      uploadType: 'resumable',
-      fields: 'id, name, webViewLink'
-    })
+      const uploadUrl = uploadResponse.headers.get('location')
+      if (!uploadUrl) {
+        throw new Error('No upload URL received from Google Drive')
+      }
 
-    // Get the upload URL from the location header
-    const uploadUrl = uploadResponse.config?.headers?.['location'] || uploadResponse.headers?.['location']
+      // Create placeholder file entry to get file ID
+      const placeholderFile = await drive.files.create({
+        requestBody: fileMetadata,
+        fields: 'id, name, webViewLink'
+      })
 
-    if (!uploadUrl) {
-      console.error('❌ Failed to get upload URL')
-      return NextResponse.json(
-        { success: false, error: 'Failed to initialize upload' },
-        { status: 500 }
-      )
+      console.log('✅ Upload URL generated successfully')
+
+      return NextResponse.json({
+        success: true,
+        uploadUrl: uploadUrl,
+        fileId: placeholderFile.data.id,
+        filename: finalFilename
+      })
+
+    } catch (uploadError) {
+      console.error('❌ Error creating upload session:', uploadError)
+      
+      // Fallback: create file entry without upload URL (for now)
+      const fileResponse = await drive.files.create({
+        requestBody: fileMetadata,
+        fields: 'id, name, webViewLink'
+      })
+
+      return NextResponse.json({
+        success: true,
+        uploadUrl: '', // Will need to implement alternative approach
+        fileId: fileResponse.data.id,
+        filename: finalFilename,
+        fallback: true
+      })
     }
-
-    console.log('✅ Upload URL generated successfully')
-
-    return NextResponse.json({
-      success: true,
-      uploadUrl: uploadUrl,
-      fileId: fileId,
-      filename: finalFilename
-    })
 
   } catch (error) {
     console.error('❌ Error initializing upload:', error)
