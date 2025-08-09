@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Calendar, Users, Trophy, Phone, Smartphone } from 'lucide-react'
+import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Calendar, Users, Phone, Smartphone } from 'lucide-react'
 import Link from 'next/link'
 
 interface FormData {
@@ -324,34 +324,6 @@ export default function VideoTikTokPage() {
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-purple-600" />
                   <span>Peserta: Masyarakat Umum (tidak termasuk CHRSJMS)</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Trophy className="w-4 h-4 text-yellow-600" />
-                  <span>Hadiah: Menarik untuk pemenang</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Upload Method Info */}
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Upload className="w-5 h-5 text-green-600" />
-                Metode Upload Video
-              </h3>
-              <div className="space-y-4 text-gray-600">
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">1. Upload di TikTok (Wajib):</h4>
-                  <p>Upload video dengan hashtag yang sudah ditentukan</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">2. Upload Backup via Google Forms:</h4>
-                  <ul className="space-y-1 list-disc list-inside">
-                    <li>Menggunakan sistem Google Forms yang reliable</li>
-                    <li>Tidak ada masalah ukuran file atau timeout</li>
-                    <li>Langsung tersimpan di Google Drive yang aman</li>
-                    <li>Backup untuk keperluan penilaian panitia</li>
-                  </ul>
                 </div>
               </div>
             </div>
