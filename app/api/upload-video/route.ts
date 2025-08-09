@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { googleDriveService, UploadVideoData } from '../../../lib/googleDrive'
 
-// Next.js 14 App Router route segment config
+// Next.js 14 App Router route segment config - optimize for Vercel Hobby
 export const runtime = 'nodejs'
-export const maxDuration = 300 // 5 minutes timeout for Vercel Pro
+export const maxDuration = 60 // Reduce to 1 minute for Hobby plan
 export const preferredRegion = 'auto'
 
 export async function POST(request: NextRequest) {
@@ -19,28 +19,60 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse form data with better error handling for large files
-    let formData: FormData
-    try {
-      // Set a reasonable timeout for form parsing
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Form parsing timeout')), 60000) // 1 minute
-      })
+    // Get content length to check size early
+    const contentLength = request.headers.get('content-length')
+    if (contentLength) {
+      const size = parseInt(contentLength)
+      console.log(`📏 Content-Length: ${size} bytes`)
       
-      const formDataPromise = request.formData()
-      formData = await Promise.race([formDataPromise, timeoutPromise]) as FormData
-      console.log('📝 Form data parsed successfully')
-    } catch (error) {
-      console.error('❌ Error parsing form data:', error)
-      if (error instanceof Error && error.message.includes('timeout')) {
+      // Strict size limit for Vercel Hobby plan
+      const maxSize = 25 * 1024 * 1024 // 25MB for Hobby plan
+      if (size > maxSize) {
+        console.error(`❌ Request too large: ${size} bytes`)
         return NextResponse.json(
-          { success: false, error: 'Upload timeout. File mungkin terlalu besar atau koneksi lambat.' },
-          { status: 408 }
+          { success: false, error: 'File terlalu besar. Maksimal 25MB untuk upload yang stabil.' },
+          { status: 413 }
         )
       }
+    }
+
+    // Parse form data with strict timeout
+    let formData: FormData
+    try {
+      // Shorter timeout for Hobby plan
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 seconds
+      
+      try {
+        formData = await request.formData()
+        clearTimeout(timeoutId)
+        console.log('📝 Form data parsed successfully')
+      } catch (parseError) {
+        clearTimeout(timeoutId)
+        throw parseError
+      }
+    } catch (error) {
+      console.error('❌ Error parsing form data:', error)
+      
+      if (error instanceof Error) {
+        if (error.name === 'AbortError' || error.message.includes('timeout')) {
+          return NextResponse.json(
+            { success: false, error: 'Upload timeout. Silakan coba dengan file yang lebih kecil (max 25MB).' },
+            { status: 408 }
+          )
+        }
+        
+        if (error.message.includes('PayloadTooLargeError') || error.message.includes('413')) {
+          return NextResponse.json(
+            { success: false, error: 'File terlalu besar. Maksimal 25MB.' },
+            { status: 413 }
+          )
+        }
+      }
+      
       return NextResponse.json(
-        { success: false, error: 'File terlalu besar atau format tidak valid. Maksimal 100MB.' },
-        { status: 413 }
+        { success: false, error: 'Error memproses file. Silakan coba lagi dengan file yang lebih kecil.' },
+        { status: 400 }
       )
     }
     
@@ -61,25 +93,28 @@ export async function POST(request: NextRequest) {
     if (!allowedTypes.includes(file.type)) {
       console.error(`❌ Invalid file type: ${file.type}`)
       return NextResponse.json(
-        { success: false, error: 'Invalid file type. Only MP4, MOV, and AVI files are allowed.' },
+        { success: false, error: 'Hanya file video MP4, MOV, atau AVI yang diperbolehkan.' },
         { status: 400 }
       )
     }
 
-    // Validate file size (max 100MB but recommend smaller)
-    const maxSize = 100 * 1024 * 1024 // 100MB in bytes
-    const recommendedSize = 50 * 1024 * 1024 // 50MB recommended
+    // Strict file size validation for better stability
+    const maxFileSize = 25 * 1024 * 1024 // 25MB strict limit
+    const warningSize = 15 * 1024 * 1024 // 15MB warning
     
-    if (file.size > maxSize) {
+    if (file.size > maxFileSize) {
       console.error(`❌ File too large: ${file.size} bytes`)
       return NextResponse.json(
-        { success: false, error: 'File size too large. Maximum size is 100MB.' },
+        { 
+          success: false, 
+          error: `File terlalu besar (${Math.round(file.size / 1024 / 1024)}MB). Maksimal 25MB untuk upload yang stabil.` 
+        },
         { status: 413 }
       )
     }
 
-    if (file.size > recommendedSize) {
-      console.warn(`⚠️ Large file detected: ${file.size} bytes. Upload may take longer.`)
+    if (file.size > warningSize) {
+      console.warn(`⚠️ Large file detected: ${Math.round(file.size / 1024 / 1024)}MB. Processing with care...`)
     }
 
     // Get metadata from form
@@ -94,24 +129,23 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!usernameAkun || !teleponPenanggungJawab || !linkTikTok || !buktiFollow) {
       console.error('❌ Missing required fields')
-      console.error('Fields:', { usernameAkun: !!usernameAkun, teleponPenanggungJawab: !!teleponPenanggungJawab, linkTikTok: !!linkTikTok, buktiFollow: !!buktiFollow })
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: 'Semua field wajib diisi' },
         { status: 400 }
       )
     }
 
-    // Convert file to buffer with better error handling
+    // Convert file to buffer with progress tracking
     console.log('🔄 Converting file to buffer...')
     let buffer: Buffer
     try {
       const bytes = await file.arrayBuffer()
       buffer = Buffer.from(bytes)
-      console.log(`✅ Buffer created: ${buffer.length} bytes`)
+      console.log(`✅ Buffer created: ${Math.round(buffer.length / 1024 / 1024)}MB`)
     } catch (error) {
       console.error('❌ Error converting file to buffer:', error)
       return NextResponse.json(
-        { success: false, error: 'Error processing file. Please try again.' },
+        { success: false, error: 'Error memproses file. File mungkin corrupt atau terlalu besar.' },
         { status: 500 }
       )
     }
@@ -133,50 +167,70 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('🚀 Starting Google Drive upload...')
-    // Upload to Google Drive with timeout
+    
+    // Upload to Google Drive with shorter timeout for Hobby plan
     const uploadPromise = googleDriveService.uploadVideo(uploadData)
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Google Drive upload timeout')), 240000) // 4 minutes
+      setTimeout(() => reject(new Error('Google Drive upload timeout')), 45000) // 45 seconds
     })
     
     const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any
 
-    if (uploadResult.success) {
+    if (uploadResult && uploadResult.success) {
       console.log('✅ Upload successful:', uploadResult.fileId)
       return NextResponse.json({
         success: true,
-        message: 'Video berhasil diupload ke Google Drive',
+        message: '🎉 Video berhasil diupload ke Google Drive!',
         data: {
           fileId: uploadResult.fileId,
           fileName: uploadResult.fileName,
           webViewLink: uploadResult.webViewLink
         }
-      })
+      }, { status: 200 })
     } else {
-      console.error('❌ Upload failed:', uploadResult.error)
+      console.error('❌ Upload failed:', uploadResult?.error)
       return NextResponse.json(
-        { success: false, error: uploadResult.error || 'Upload failed' },
+        { 
+          success: false, 
+          error: uploadResult?.error || 'Upload ke Google Drive gagal. Silakan coba lagi.' 
+        },
         { status: 500 }
       )
     }
 
   } catch (error) {
-    console.error('❌ Error in upload-video API:', error)
+    console.error('❌ Critical error in upload-video API:', error)
     
     if (error instanceof Error) {
       console.error('Error details:', error.message)
       
-      // Handle specific timeout errors
-      if (error.message.includes('timeout')) {
+      // Handle specific error types
+      if (error.message.includes('timeout') || error.message.includes('TimeoutError')) {
         return NextResponse.json(
-          { success: false, error: 'Upload timeout. Silakan coba lagi dengan file yang lebih kecil.' },
+          { 
+            success: false, 
+            error: 'Upload timeout. Coba gunakan file yang lebih kecil atau koneksi yang lebih stabil.' 
+          },
           { status: 408 }
+        )
+      }
+      
+      if (error.message.includes('413') || error.message.includes('PayloadTooLarge')) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'File terlalu besar untuk diproses. Maksimal 25MB.' 
+          },
+          { status: 413 }
         )
       }
     }
     
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { 
+        success: false, 
+        error: 'Terjadi kesalahan server. Silakan coba lagi nanti.' 
+      },
       { status: 500 }
     )
   }
@@ -190,6 +244,7 @@ export async function OPTIONS(request: NextRequest) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
     },
   })
 } 

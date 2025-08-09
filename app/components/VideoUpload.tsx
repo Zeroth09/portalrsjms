@@ -27,9 +27,9 @@ export default function VideoUpload({
   const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Allowed file types and max size
+  // Allowed file types and max size - optimized for Vercel Hobby plan
   const allowedTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/quicktime']
-  const maxSize = 100 * 1024 * 1024 // 100MB
+  const maxSize = 25 * 1024 * 1024 // 25MB for stable uploads
 
   const validateFile = (file: File): string | null => {
     // Check file type
@@ -37,13 +37,13 @@ export default function VideoUpload({
       return 'Hanya file video MP4, MOV, atau AVI yang diperbolehkan'
     }
 
-    // Check file size - be more conservative for upload limits
+    // Check file size - optimized for Vercel Hobby plan
     if (file.size > maxSize) {
-      return `Ukuran file terlalu besar (${formatFileSize(file.size)}). Maksimal 100MB untuk menghindari timeout upload.`
+      return `Ukuran file terlalu besar (${formatFileSize(file.size)}). Maksimal 25MB untuk upload yang stabil.`
     }
 
-    // Warning for large files
-    if (file.size > 50 * 1024 * 1024) {
+    // Warning for large files (>15MB)
+    if (file.size > 15 * 1024 * 1024) {
       console.warn(`⚠️ Large file detected: ${formatFileSize(file.size)}. Upload might take longer.`)
     }
 
@@ -184,7 +184,7 @@ export default function VideoUpload({
               
               <div className="text-xs text-gray-400 space-y-1">
                 <p>• Format: MP4, MOV, AVI</p>
-                <p>• Maksimal: 100MB</p>
+                <p>• Maksimal: 25MB (untuk upload yang stabil)</p>
                 <p>• Durasi maksimal: 60 detik</p>
               </div>
             </motion.div>
