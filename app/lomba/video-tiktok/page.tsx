@@ -11,7 +11,6 @@ interface FormData {
   teleponPenanggungJawab: string
   linkTikTok: string
   buktiFollow: string
-  googleFormsUrl: string // Link ke submission Google Forms untuk video
 }
 
 export default function VideoTikTokPage() {
@@ -20,8 +19,7 @@ export default function VideoTikTokPage() {
     asalInstansi: '',
     teleponPenanggungJawab: '',
     linkTikTok: '',
-    buktiFollow: '',
-    googleFormsUrl: ''
+    buktiFollow: ''
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -55,7 +53,6 @@ export default function VideoTikTokPage() {
         teleponPenanggungJawab: formData.teleponPenanggungJawab,
         linkTikTok: formData.linkTikTok,
         buktiFollow: formData.buktiFollow,
-        googleFormsUrl: formData.googleFormsUrl,
         jenisLomba: 'Video TikTok'
       }
 
@@ -76,8 +73,7 @@ export default function VideoTikTokPage() {
           asalInstansi: '',
           teleponPenanggungJawab: '',
           linkTikTok: '',
-          buktiFollow: '',
-          googleFormsUrl: ''
+          buktiFollow: ''
         })
       } else {
         setSubmitStatus('error')
@@ -91,8 +87,8 @@ export default function VideoTikTokPage() {
     }
   }
 
-  // Google Forms URL untuk upload video
-  const googleFormsVideoUploadUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdExample_VideoUpload_FormID/viewform"
+  // Google Forms URL untuk upload video - actual form yang sudah dibuat
+  const googleFormsVideoUploadUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeRHJEg7tyrwdDb9vpE3IbBdxQPzrbnMDL-RlQk9DJmMvbBFg/viewform"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-hijau-50 via-white to-purple-50">
@@ -246,24 +242,7 @@ export default function VideoTikTokPage() {
                 </p>
               </div>
 
-              {/* Link Google Forms Upload (Optional) */}
-              <div>
-                <label htmlFor="googleFormsUrl" className="block text-sm font-medium text-gray-700 mb-2">
-                  Link Submission Google Forms Video (Optional)
-                </label>
-                <input
-                  type="url"
-                  id="googleFormsUrl"
-                  name="googleFormsUrl"
-                  value={formData.googleFormsUrl}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="https://docs.google.com/forms/d/..."
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  Link submission setelah upload video melalui Google Forms di bawah
-                </p>
-              </div>
+
 
               {/* Submit Button */}
               <button
@@ -298,65 +277,65 @@ export default function VideoTikTokPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4"
                 >
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2 mb-3">
-                      <Upload className="w-4 h-4" />
-                      Upload Video via Google Forms
-                    </h4>
-                    <p className="text-sm text-blue-700 mb-4">
-                      Upload video backup menggunakan Google Forms untuk keamanan dan reliability maksimal.
-                    </p>
-                    
-                    {/* Embedded Google Forms */}
-                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
-                      <iframe
-                        src={googleFormsVideoUploadUrl}
-                        width="100%"
-                        height="600"
-                        frameBorder="0"
-                        marginHeight={0}
-                        marginWidth={0}
-                        title="Upload Video TikTok"
-                        className="w-full"
-                      >
-                        Loading…
-                      </iframe>
-                    </div>
+                                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                     <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2 mb-3">
+                       <Upload className="w-4 h-4" />
+                       Upload Video via Google Forms
+                     </h4>
+                     <p className="text-sm text-blue-700 mb-4">
+                       Upload video backup menggunakan Google Forms - simple dan 100% reliable!
+                     </p>
+                     
+                     {/* Embedded Google Forms */}
+                     <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                       <iframe
+                         src={googleFormsVideoUploadUrl}
+                         width="100%"
+                         height="500"
+                         frameBorder="0"
+                         marginHeight={0}
+                         marginWidth={0}
+                         title="Upload Video TikTok"
+                         className="w-full"
+                       >
+                         Loading…
+                       </iframe>
+                     </div>
 
-                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <h5 className="text-sm font-medium text-yellow-800 mb-2">📋 Petunjuk Upload:</h5>
-                      <ul className="text-sm text-yellow-700 space-y-1">
-                        <li>• Isi username yang sama dengan form utama</li>
-                        <li>• Upload video backup sebagai antisipasi</li>
-                        <li>• Salin link submission setelah berhasil upload</li>
-                        <li>• Paste link submission ke field di atas (optional)</li>
-                      </ul>
-                    </div>
+                     <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                       <h5 className="text-sm font-medium text-green-800 mb-2">✨ Simple Upload Process:</h5>
+                       <ul className="text-sm text-green-700 space-y-1">
+                         <li>• Langsung upload video - no complicated fields!</li>
+                         <li>• 100% reliable menggunakan infrastruktur Google</li>
+                         <li>• No file size limits atau timeout issues</li>
+                         <li>• Automatic save ke Google Drive yang aman</li>
+                       </ul>
+                     </div>
 
-                    <div className="mt-4 flex items-center gap-2">
-                      <Link2 className="w-4 h-4 text-purple-600" />
-                      <a
-                        href={googleFormsVideoUploadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-purple-600 hover:text-purple-800 text-sm font-medium"
-                      >
-                        Buka Google Forms di Tab Baru
-                      </a>
-                    </div>
-                  </div>
+                     <div className="mt-4 flex items-center gap-2">
+                       <Link2 className="w-4 h-4 text-purple-600" />
+                       <a
+                         href={googleFormsVideoUploadUrl}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="text-purple-600 hover:text-purple-800 text-sm font-medium"
+                       >
+                         Buka Google Forms di Tab Baru
+                       </a>
+                     </div>
+                   </div>
                 </motion.div>
               )}
 
-              <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <h4 className="text-sm font-medium text-gray-800 mb-2">💡 Keuntungan Google Forms Upload:</h4>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• 100% reliable menggunakan infrastruktur Google</li>
-                  <li>• Tidak ada batasan ukuran file yang ketat</li>
-                  <li>• Upload langsung ke Google Drive yang aman</li>
-                  <li>• Tidak bergantung pada server website</li>
-                </ul>
-              </div>
+                             <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                 <h4 className="text-sm font-medium text-gray-800 mb-2">🎯 Why Google Forms is Perfect:</h4>
+                 <ul className="text-sm text-gray-600 space-y-1">
+                   <li>• <strong>Simple</strong>: Cukup upload video, no complex forms</li>
+                   <li>• <strong>Reliable</strong>: 100% menggunakan infrastruktur Google</li>
+                   <li>• <strong>No Limits</strong>: Upload file besar tanpa masalah</li>
+                   <li>• <strong>Secure</strong>: Langsung tersimpan di Google Drive yang aman</li>
+                 </ul>
+               </div>
             </div>
           </motion.div>
 
