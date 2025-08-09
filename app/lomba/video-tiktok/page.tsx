@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Users, Calendar, Trophy, Clock, Smartphone, Camera } from 'lucide-react'
+import { ArrowLeft, Video, Upload, CheckCircle2, AlertCircle, ExternalLink, Users, Calendar, Trophy, Clock, Smartphone, Camera, FileVideo, Link2 } from 'lucide-react'
 import Link from 'next/link'
-import VideoUpload from '../../components/VideoUpload'
 
 interface FormData {
   usernameAkun: string
@@ -12,7 +11,7 @@ interface FormData {
   teleponPenanggungJawab: string
   linkTikTok: string
   buktiFollow: string
-  videoFile?: File
+  googleFormsUrl: string // Link ke submission Google Forms untuk video
 }
 
 export default function VideoTikTokPage() {
@@ -22,99 +21,17 @@ export default function VideoTikTokPage() {
     teleponPenanggungJawab: '',
     linkTikTok: '',
     buktiFollow: '',
+    googleFormsUrl: ''
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-
-  // Google Drive Upload States
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
-  const [uploadError, setUploadError] = useState('')
-  const [driveFileId, setDriveFileId] = useState<string>('')
-  const [driveFileUrl, setDriveFileUrl] = useState<string>('')
+  const [showVideoUpload, setShowVideoUpload] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleFileSelect = (file: File) => {
-    setFormData(prev => ({ ...prev, videoFile: file }))
-    setUploadStatus('idle')
-    setUploadError('')
-    setDriveFileId('')
-    setDriveFileUrl('')
-  }
-
-  const handleFileRemove = () => {
-    setFormData(prev => ({ ...prev, videoFile: undefined }))
-    setUploadStatus('idle')
-    setUploadProgress(0)
-    setUploadError('')
-    setDriveFileId('')
-    setDriveFileUrl('')
-  }
-
-  // Simplified upload to Google Drive via our API (chunked)
-  const uploadToGoogleDrive = async (file: File): Promise<{ fileId: string; webViewLink: string } | null> => {
-    try {
-      setUploadStatus('uploading')
-      setUploadProgress(0)
-
-      // Prepare form data for multipart upload
-      const uploadFormData = new FormData()
-      uploadFormData.append('video', file)
-      uploadFormData.append('usernameAkun', formData.usernameAkun)
-      uploadFormData.append('asalInstansi', formData.asalInstansi)
-      uploadFormData.append('teleponPenanggungJawab', formData.teleponPenanggungJawab)
-      uploadFormData.append('linkTikTok', formData.linkTikTok)
-      uploadFormData.append('buktiFollow', formData.buktiFollow)
-
-      // Simulate progress
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
-          }
-          return prev + 10
-        })
-      }, 500)
-
-      console.log('🚀 Uploading to Google Drive via server...')
-
-      const response = await fetch('/api/upload-video', {
-        method: 'POST',
-        body: uploadFormData
-      })
-
-      clearInterval(progressInterval)
-      setUploadProgress(100)
-
-      const result = await response.json()
-
-      if (result.success) {
-        setUploadStatus('success')
-        console.log('✅ Upload successful:', result.data?.fileId)
-        return {
-          fileId: result.data?.fileId || '',
-          webViewLink: result.data?.webViewLink || ''
-        }
-      } else {
-        setUploadStatus('error')
-        setUploadError(result.error || 'Upload gagal')
-        console.error('❌ Upload failed:', result.error)
-        return null
-      }
-    } catch (error) {
-      setUploadStatus('error')
-      setUploadError('Terjadi kesalahan saat upload. Coba dengan file yang lebih kecil.')
-      setUploadProgress(0)
-      console.error('❌ Upload error:', error)
-      return null
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -131,22 +48,6 @@ export default function VideoTikTokPage() {
         return
       }
 
-      // Upload video to Google Drive if file is selected
-      let uploadResult = null
-      if (formData.videoFile) {
-        console.log('🎬 Starting video upload...')
-        uploadResult = await uploadToGoogleDrive(formData.videoFile)
-        
-        if (!uploadResult) {
-          setSubmitStatus('error')
-          setErrorMessage('Upload video gagal. Silakan coba lagi.')
-          return
-        }
-
-        setDriveFileId(uploadResult.fileId)
-        setDriveFileUrl(uploadResult.webViewLink)
-      }
-
       // Register data to spreadsheet
       const registrationData = {
         usernameAkun: formData.usernameAkun,
@@ -154,9 +55,8 @@ export default function VideoTikTokPage() {
         teleponPenanggungJawab: formData.teleponPenanggungJawab,
         linkTikTok: formData.linkTikTok,
         buktiFollow: formData.buktiFollow,
-        jenisLomba: 'Video TikTok',
-        driveFileId: uploadResult?.fileId || '',
-        driveFileUrl: uploadResult?.webViewLink || ''
+        googleFormsUrl: formData.googleFormsUrl,
+        jenisLomba: 'Video TikTok'
       }
 
       const response = await fetch('/api/pendaftaran', {
@@ -177,9 +77,8 @@ export default function VideoTikTokPage() {
           teleponPenanggungJawab: '',
           linkTikTok: '',
           buktiFollow: '',
-          videoFile: undefined
+          googleFormsUrl: ''
         })
-        handleFileRemove()
       } else {
         setSubmitStatus('error')
         setErrorMessage(result.error || 'Terjadi kesalahan')
@@ -191,6 +90,9 @@ export default function VideoTikTokPage() {
       setIsSubmitting(false)
     }
   }
+
+  // Google Forms URL untuk upload video
+  const googleFormsVideoUploadUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdExample_VideoUpload_FormID/viewform"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-hijau-50 via-white to-purple-50">
@@ -234,18 +136,7 @@ export default function VideoTikTokPage() {
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
                 <div>
                   <p className="text-green-800 font-medium">Pendaftaran Berhasil!</p>
-                  <p className="text-green-700 text-sm">Data Anda telah tersimpan dan video berhasil diupload ke Google Drive.</p>
-                  {driveFileUrl && (
-                    <a 
-                      href={driveFileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-600 hover:text-green-800 text-sm flex items-center gap-1 mt-1"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      Lihat Video di Google Drive
-                    </a>
-                  )}
+                  <p className="text-green-700 text-sm">Data Anda telah tersimpan. Jangan lupa upload video melalui form Google di bawah!</p>
                 </div>
               </motion.div>
             )}
@@ -355,46 +246,118 @@ export default function VideoTikTokPage() {
                 </p>
               </div>
 
-              {/* Upload Video */}
+              {/* Link Google Forms Upload (Optional) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Upload Video (Optional)
+                <label htmlFor="googleFormsUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                  Link Submission Google Forms Video (Optional)
                 </label>
-                <VideoUpload
-                  onFileSelect={handleFileSelect}
-                  onFileRemove={handleFileRemove}
-                  uploadProgress={uploadProgress}
-                  isUploading={uploadStatus === 'uploading'}
-                  uploadStatus={uploadStatus}
-                  errorMessage={uploadError}
-                  disabled={isSubmitting}
+                <input
+                  type="url"
+                  id="googleFormsUrl"
+                  name="googleFormsUrl"
+                  value={formData.googleFormsUrl}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="https://docs.google.com/forms/d/..."
                 />
-                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2">
-                    <Upload className="w-4 h-4" />
-                    Petunjuk Upload Video:
-                  </h4>
-                  <ul className="text-sm text-blue-700 mt-2 space-y-1">
-                    <li>• Video akan disimpan secara privat di Google Drive</li>
-                    <li>• Hanya admin yang dapat mengakses folder video</li>
-                    <li>• Pastikan video sudah diupload di TikTok sebelum submit</li>
-                    <li>• Sertakan link TikTok yang valid</li>
-                  </ul>
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  Upload video sebagai backup. Video akan disimpan aman di Google Drive privat.
+                <p className="text-sm text-gray-500 mt-1">
+                  Link submission setelah upload video melalui Google Forms di bawah
                 </p>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting || uploadStatus === 'uploading'}
+                disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-hijau-600 via-purple-500 to-hijau-600 text-white py-4 px-6 rounded-lg font-medium hover:from-hijau-700 hover:via-purple-600 hover:to-hijau-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Mendaftar...' : uploadStatus === 'uploading' ? 'Mengupload Video...' : 'Daftar Sekarang'}
+                {isSubmitting ? 'Mendaftar...' : 'Daftar Sekarang'}
               </button>
             </form>
+
+            {/* Video Upload Section */}
+            <div className="mt-8 pt-8 border-t border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                  <FileVideo className="w-5 h-5 text-purple-600" />
+                  Upload Video (Backup)
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowVideoUpload(!showVideoUpload)}
+                  className="text-purple-600 hover:text-purple-800 text-sm font-medium"
+                >
+                  {showVideoUpload ? 'Sembunyikan' : 'Tampilkan Form'}
+                </button>
+              </div>
+
+              {showVideoUpload && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-4"
+                >
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-blue-800 flex items-center gap-2 mb-3">
+                      <Upload className="w-4 h-4" />
+                      Upload Video via Google Forms
+                    </h4>
+                    <p className="text-sm text-blue-700 mb-4">
+                      Upload video backup menggunakan Google Forms untuk keamanan dan reliability maksimal.
+                    </p>
+                    
+                    {/* Embedded Google Forms */}
+                    <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
+                      <iframe
+                        src={googleFormsVideoUploadUrl}
+                        width="100%"
+                        height="600"
+                        frameBorder="0"
+                        marginHeight={0}
+                        marginWidth={0}
+                        title="Upload Video TikTok"
+                        className="w-full"
+                      >
+                        Loading…
+                      </iframe>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <h5 className="text-sm font-medium text-yellow-800 mb-2">📋 Petunjuk Upload:</h5>
+                      <ul className="text-sm text-yellow-700 space-y-1">
+                        <li>• Isi username yang sama dengan form utama</li>
+                        <li>• Upload video backup sebagai antisipasi</li>
+                        <li>• Salin link submission setelah berhasil upload</li>
+                        <li>• Paste link submission ke field di atas (optional)</li>
+                      </ul>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-2">
+                      <Link2 className="w-4 h-4 text-purple-600" />
+                      <a
+                        href={googleFormsVideoUploadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-600 hover:text-purple-800 text-sm font-medium"
+                      >
+                        Buka Google Forms di Tab Baru
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <h4 className="text-sm font-medium text-gray-800 mb-2">💡 Keuntungan Google Forms Upload:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• 100% reliable menggunakan infrastruktur Google</li>
+                  <li>• Tidak ada batasan ukuran file yang ketat</li>
+                  <li>• Upload langsung ke Google Drive yang aman</li>
+                  <li>• Tidak bergantung pada server website</li>
+                </ul>
+              </div>
+            </div>
           </motion.div>
 
           {/* Info Section */}
@@ -421,6 +384,30 @@ export default function VideoTikTokPage() {
                 <div className="flex items-center gap-3">
                   <Trophy className="w-4 h-4 text-yellow-600" />
                   <span>Hadiah: Menarik untuk pemenang</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Upload Method Info */}
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Upload className="w-5 h-5 text-green-600" />
+                Metode Upload Video
+              </h3>
+              <div className="space-y-4 text-gray-600">
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">1. Upload di TikTok (Wajib):</h4>
+                  <p>Upload video dengan hashtag yang sudah ditentukan</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">2. Upload Backup via Google Forms:</h4>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Menggunakan sistem Google Forms yang reliable</li>
+                    <li>Tidak ada masalah ukuran file atau timeout</li>
+                    <li>Langsung tersimpan di Google Drive yang aman</li>
+                    <li>Backup untuk keperluan penilaian panitia</li>
+                  </ul>
                 </div>
               </div>
             </div>
