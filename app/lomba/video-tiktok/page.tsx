@@ -218,13 +218,47 @@ export default function VideoTikTokPage() {
                   name="linkTikTok"
                   value={formData.linkTikTok}
                   onChange={handleInputChange}
+                  placeholder="https://www.tiktok.com/@username/video/..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="https://tiktok.com/@username/video/..."
                   required
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Pastikan video sudah diupload di TikTok dengan hashtag #rsj_mutiarasukma dan #merdekajiwarsrsjms
+                  Paste link video TikTok yang sudah diupload
                 </p>
+                
+                {/* Google Forms Upload Button */}
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Upload className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-blue-800 mb-1">
+                        Upload Video Backup
+                      </h4>
+                      <p className="text-sm text-blue-700 mb-3">
+                        Upload copy video Anda sebagai backup menggunakan Google Forms. 
+                        Simple, reliable, dan 100% aman!
+                      </p>
+                      <a
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSeRHJEg7tyrwdDb9vpE3IbBdxQPzrbnMDL-RlQk9DJmMvbBFg/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md"
+                      >
+                        <Upload className="w-4 h-4" />
+                        Upload via Google Forms
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                      <div className="mt-2 flex items-center gap-2 text-xs text-blue-600">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>Recommended untuk file besar</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Link Screenshot Bukti Follow */}
